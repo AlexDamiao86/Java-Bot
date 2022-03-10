@@ -64,7 +64,8 @@ class PedidoTest {
 	@Test
 	void naoDeveExcluirDeListaVazia() {
 				
-		assertEquals("Não houve nenhum pedido de Pina Colada até o momento.", pedido.risca(Bebidas.PINACOLADA, 1));
+		assertEquals("Não houve nenhum pedido de Pina Colada até o momento.", 
+				        pedido.risca(Bebidas.PINACOLADA, 1));
 	}
 	
 

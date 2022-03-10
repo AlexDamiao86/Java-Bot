@@ -6,14 +6,15 @@ package telegram_bot;
  * @version 1.0
  */
 
-/**
- * Construtor da classe, inicializa o array com zeros varrendo de acordo 
- * com o tamanho do Enum Bebidas.
- */
 public class Pedido {
 	
+	private static final int TAMANHOLINHA = 40;
 	private int[] quantidades;
 	
+	/**
+	 * Construtor da classe, inicializa o array com zeros varrendo de acordo 
+	 * com o tamanho do Enum Bebidas.
+	 */
 	public Pedido() {
 		quantidades = new int[Bebidas.values().length];
 		
@@ -35,7 +36,6 @@ public class Pedido {
 			
 			return (qtd+ " " +bebida.getNomeBebida()+ ". Anotado no pedido!");
 		}
-		
 		return ("A quantidade deve ser 1 ou mais para anotar seu pedido!");
 	}
 	
@@ -63,25 +63,45 @@ public class Pedido {
 	 * @return A lista contendo todas as bebidas do pedido até o momento.
 	 */
 	public String consulta() {
-		String consulta = "";
+		String consulta = "\nCONSULTA DE COMANDA" +criaLinha();
 		
 		for (Bebidas bebida : Bebidas.values()) {
 			if (quantidades[bebida.getNum()] > 0) {
-				consulta += ("\n" +bebida.getNomeBebida() + " ................ " 
-						+ quantidades[bebida.getNum()]);
+				consulta += ("\n" +bebida.getNomeBebida());
+				String linha = "";
+				for (int i = 0; i < (TAMANHOLINHA-bebida.getNomeBebida().length()); i++) {
+					linha += ".";
+				}
+				consulta += linha + quantidades[bebida.getNum()];
 			}
 		}
-		consulta += ("\nQUANTIDADE TOTAL DE BEBIDAS PEDIDAS: " +contaBebidas()+ "\n");
+		consulta += criaLinha();
+		consulta += ("\nQUANTIDADE TOTAL DE BEBIDAS PEDIDAS:... " +contaBebidas()+ "\n");
 		
 		return consulta;
 	}
+
+	/**
+	 * @return linha separadora de seções da comanda
+	 */
+	private String criaLinha() {
+		String linha = "\n";
+		while(linha.length() <= TAMANHOLINHA) {
+			linha += "=";
+		}
+		return linha;
+	}
 	
+	/**
+	 * @return Quantidade total de bebidas solicitdas no pedido ate o momento
+	 */
 	public int contaBebidas() {
 		int qtdTotal = 0;
+		
 		for (int i = 0; i < quantidades.length; i++) {
 			qtdTotal += quantidades[i];
+			System.out.println(i);
 		}
 		return qtdTotal;
 	}
-	
 }

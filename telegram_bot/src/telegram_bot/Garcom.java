@@ -11,6 +11,8 @@ import java.util.Scanner;
  */
 public class Garcom {
 
+	private static final int TAMLINHA = 40;
+
 	/**
 	 * @param args
 	 * Todo o fluxo é controlado pela 'opcao' colhida pela 'teclado'
@@ -27,16 +29,16 @@ public class Garcom {
 		resposta = teclado.nextLine();
 		System.out.println(resposta);
 		if (resposta.charAt(0) == 's') {
-			listarBebidas();
+			mostrarMenu();
 		}
 		
 		opcao = 98;  //Força a entrada no laço de conversação
 		
 		while (opcao < 99 && opcao >= 0) {
-			System.out.println("\nPara fazer seu pedido, escolha uma bebida pelo número "
+			System.out.println("\nPeça pelo número da bebida ou "
 					+ "\n40 para consultar sua comanda"
 					+ "\n50 para ver o menu novamente "
-					+ "\n60 para retirar um item  do pedido"
+					+ "\n60 para retirar um item do pedido"
 					+ "\n99 para sair");
 			opcao = teclado.nextInt();
 			
@@ -50,10 +52,10 @@ public class Garcom {
 			} else if (opcao == 40) {
 				System.out.println(pedido.consulta());
 			} else if (opcao == 50) {
-				listarBebidas();
+				mostrarMenu();
 			} else if (opcao == 60) {
 				System.out.println("Qual item gostaria de retirar do pedido?");
-				listarBebidas();
+				mostrarMenu();
 				opcao = teclado.nextInt();
 				if (opcao > 0 && opcao < Bebidas.values().length) {
 					int quantidade = 0;
@@ -65,17 +67,25 @@ public class Garcom {
 				}
 			}
 		}
-		System.out.println("\n\nFoi um prazer atender, volte sempre!");
+		System.out.println("\nFOI UM PRAZER ATENDER, VOLTE SEMPRE!");
 		teclado.close();
 	}
 
 	/**
 	 * Gera menu de todas as bebidas disponíveis e seus respectivos números
 	 */
-	private static void listarBebidas() {
+	private static void mostrarMenu() {
+		String menu = "              ***  MENU DE BEBIDAS  ***"
+				+ "\n---------------------------------------------------";
 		for (Bebidas bebida : Bebidas.values()) {
-			System.out.println(bebida.getNum()+ ". " +bebida.getNomeBebida());
+			menu+= "\n" +bebida.getNum()+ ". " +bebida.getNomeBebida();
+			
+			String linha ="";
+			while ((linha.length() + bebida.getNomeBebida().length()) < TAMLINHA ){
+				linha+= ".";
+			}
+			menu+=  linha+ " R$ " +bebida.getPreco();
 		}
+		System.out.println(menu);
 	}
-
 }
