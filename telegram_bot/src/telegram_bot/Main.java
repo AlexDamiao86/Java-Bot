@@ -14,9 +14,9 @@ import com.pengrad.telegrambot.response.SendResponse;
 
 public class Main {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		// Criacao do objeto bot com as informacoes de acesso.
-		TelegramBot bot = new TelegramBot("SEU_TOKEN_ACESSO");
+		TelegramBot bot = new TelegramBot("");
 
 		// Objeto responsavel por receber as mensagens.
 		GetUpdatesResponse updatesResponse;
@@ -59,6 +59,7 @@ public class Main {
 
 				// Verificacao de mensagem enviada com sucesso.
 				System.out.println("Mensagem Enviada? " + sendResponse.isOk());
+				
 			}
 		}
 	}
