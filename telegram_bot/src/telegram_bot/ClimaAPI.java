@@ -18,10 +18,22 @@ public class ClimaAPI {
 	private static ClimaCidade obtemDadosClima(String cidade) throws Exception {
 		
 		ClimaCidade climaAtual = restTemplate.getForObject("http://api.openweathermap.org/data/2.5/weather?q="
-				+ cidade + "&units=metric&lang=PT_BR&appid=" + TOKEN, ClimaCidade.class);	
+			+ cidade + "&units=metric&lang=PT_BR&appid=" + TOKEN, ClimaCidade.class);
 		return climaAtual;
+					
 	}
-	/*Consulta a temperatura e devolve um texto com a cidade e temperatura*/
+	/*Consulta os dados da API a partir da latitude e longitude informada e coloca em um objeto da classe ClimaCidade*/
+	private static ClimaCidade obtemDadosClima(String latitude, String longitude) throws Exception {
+		
+		
+		ClimaCidade climaAtual = restTemplate.getForObject("http://api.openweathermap.org/data/2.5/weather?lat="
+		+ latitude + "&lon=" + longitude +"&units=metric&lang=PT_BR&appid=" + TOKEN, ClimaCidade.class);	
+		return climaAtual;
+			
+	    
+	}
+	
+	/*Consulta a temperatura por nome da cidade e devolve um texto com a cidade e temperatura*/
 	public static String obtemDadosTemperaturaTexto(String cidade) throws Exception {
 		
 		ClimaCidade climaAtual = obtemDadosClima(cidade);
@@ -31,10 +43,28 @@ public class ClimaAPI {
 		return clima;
 
 	}
-	/*Consulta a temperatura e devolve o valor no formato double*/
+	/*Consulta a temperatura por latitude longitude e devolve um texto com a cidade e temperatura*/
+	public static String obtemDadosTemperaturaTexto(String latitude, String longitude) throws Exception {
+		
+		ClimaCidade climaAtual = obtemDadosClima(latitude, longitude);
+		String clima = "Cidade: " + climaAtual.getName()  + "\nTemperatura: "
+				+ climaAtual.getTemp().getTemp()  + " graus"; 
+
+		return clima;
+
+	}
+	/*Consulta a temperatura pelo nome da cidade e devolve o valor no formato double*/
 	public static Double obtemDadosTemperaturaNumero(String cidade) throws Exception {
 		
 		ClimaCidade climaAtual = obtemDadosClima(cidade);
+		return climaAtual.getTemp().getTemp();
+
+	}
+	
+	/*Consulta a temperatura pela latitude e longitude e devolve o valor no formato double*/
+	public static Double obtemDadosTemperaturaNumero(String latitude, String longitude) throws Exception {
+		
+		ClimaCidade climaAtual = obtemDadosClima(latitude, longitude);
 		return climaAtual.getTemp().getTemp();
 
 	}
