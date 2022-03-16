@@ -70,7 +70,7 @@ public class Garcom {
 				break;
 			}
 		}
-		System.out.println("\n   FOI UM PRAZER ATENDER, VOLTE SEMPRE!");
+		System.out.println("\n FOI UM PRAZER ATENDER, VOLTE SEMPRE!");
 		teclado.close();
 	}
 
