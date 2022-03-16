@@ -21,7 +21,7 @@ public class Main {
     
 	public static void main(String[] args) {
 		// Criacao do objeto bot com as informacoes de acesso.
-		TelegramBot bot = new TelegramBot("Colocar o token aqui");
+		TelegramBot bot = new TelegramBot("5075462972:AAGPg6M1OxG-AmkN-x9WfYRFH3VL4RZCXj4");
         clientes = new HashMap<Long, Cliente>();
 		// Objeto responsavel por receber as mensagens.
 		GetUpdatesResponse updatesResponse;
