@@ -36,10 +36,10 @@ public class Garcom {
 		
 		while (opcao < 99 && opcao >= 0) {
 			System.out.println("\nPeça pelo número da bebida ou "
-					+ "\n40 para consultar sua comanda"
-					+ "\n50 para ver o menu novamente "
-					+ "\n60 para retirar um item do pedido"
-					+ "\n99 para sair");
+					+ "\n40 Consultar sua comanda"
+					+ "\n50 Ver o menu novamente "
+					+ "\n60 Retirar um item do pedido"
+					+ "\n99 Fechar a conta");
 			opcao = teclado.nextInt();
 			
 			if (opcao > 0 && opcao < Bebidas.values().length) {  //Pedido valido de bebidas
@@ -65,9 +65,12 @@ public class Garcom {
 					}
 					System.out.println(pedido.risca(bebidaPedida[opcao], quantidade));
 				}
+			} else if (opcao == 99) {
+				pedido.gerarConta();
+				break;
 			}
 		}
-		System.out.println("\nFOI UM PRAZER ATENDER, VOLTE SEMPRE!");
+		System.out.println("\n   FOI UM PRAZER ATENDER, VOLTE SEMPRE!");
 		teclado.close();
 	}
 
