@@ -104,4 +104,21 @@ public class Pedido {
 		}
 		return qtdTotal;
 	}
+	
+	/**
+	 * Gera a conta com a descrição das bebidas e valores do pedido e o total
+	 * mostra na tela a conta para o cliente.
+	 */
+	public void gerarConta() {
+		double total = 0;
+		System.out.println("\n*** DEMONSTRATIVO DE CUSTOS DO PEDIDO ***\n*");
+		for (Bebidas bebida : Bebidas.values()) {
+			if (quantidades[bebida.getNum()] > 0) {
+				double totalDaBebida = quantidades[bebida.getNum()]*bebida.getPreco();
+				System.out.println("* "+quantidades[bebida.getNum()] +" "+bebida.getNomeBebida()+" ........ R$ "+ totalDaBebida);
+				total += totalDaBebida;
+			}
+		}
+		System.out.println("*\n* VALOR TOTAL DO PEDIDO .............. R$ " + total);
+	}
 }
