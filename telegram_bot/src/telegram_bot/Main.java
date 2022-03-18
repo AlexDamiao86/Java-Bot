@@ -17,12 +17,13 @@ import conversacao.Cliente;
 import conversacao.Iteracao;
 
 public class Main {
-    private static HashMap<Long, Cliente>  clientes;
     
 	public static void main(String[] args) {
 		// Criacao do objeto bot com as informacoes de acesso.
-		TelegramBot bot = new TelegramBot("");
-        clientes = new HashMap<Long, Cliente>();
+		TelegramBot bot = new TelegramBot("5129788142:AAHAyyEguv51zDQUeph6k4s_ABAZBiRVUUc");
+        
+		HashMap<Long, Cliente> clientes = new HashMap<Long, Cliente>();
+		
 		// Objeto responsavel por receber as mensagens.
 		GetUpdatesResponse updatesResponse;
 
@@ -55,17 +56,19 @@ public class Main {
 				
 				Long idCliente = update.message().chat().id();
 				String nome = update.message().chat().firstName();
-				String sobreNome = update.message().chat().lastName();
-				Cliente cliente = new Cliente(idCliente,nome,sobreNome);
+				String sobrenome = update.message().chat().lastName();
+				Cliente cliente = new Cliente(idCliente, nome, sobrenome);
 				if (!clientes.containsKey(idCliente)) {
 				    Iteracao conversa = new Iteracao(cliente);
 				    cliente.setConversa(conversa);
 				    clientes.put(idCliente, cliente);
-				}else {
+				} else {
 					cliente = clientes.get(idCliente);
 				}
 				
 				cliente.setPergunta(update.message().text());
+				
+				
 				// Envio de "Escrevendo" antes de enviar a resposta.
 				baseResponse = bot.execute(new SendChatAction(cliente.getIdentificador(), ChatAction.typing.name()));
 

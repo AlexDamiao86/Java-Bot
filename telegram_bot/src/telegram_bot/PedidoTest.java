@@ -26,7 +26,7 @@ class PedidoTest {
 	@Test
 	void deveAceitar1PedidoDeCadaDrink() {
 		
-		pedido.anota(Bebidas.CAPIRINHA, 1);
+		pedido.anota(Bebidas.CAIPIRINHA, 1);
 		pedido.anota(Bebidas.CERVEJABUD, 1);
 		pedido.anota(Bebidas.CUBALIBRE, 1);
 		pedido.anota(Bebidas.PINACOLADA, 1);
@@ -54,9 +54,9 @@ class PedidoTest {
 	
 	@Test
 	void naoDeveExcluir5DaListaDe3() {
-		pedido.anota(Bebidas.CAPIRINHA, 3);
+		pedido.anota(Bebidas.CAIPIRINHA, 3);
 		
-		System.out.println(pedido.risca(Bebidas.CAPIRINHA, 5));
+		System.out.println(pedido.risca(Bebidas.CAIPIRINHA, 5));
 		
 		assertEquals(3, pedido.contaBebidas());
 	}

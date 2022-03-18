@@ -3,14 +3,14 @@ package conversacao;
 public class Cliente {
 	private Long identificador;
 	private String nome;
-	private String sobreNome;
+	private String sobrenome;
 	private Iteracao conversa;
 	private String perguntaResposta;
 	
-	public Cliente(Long id, String nome, String sobreNome) {
+	public Cliente(Long id, String nome, String sobrenome) {
 		this.identificador = id;
 		this.nome = nome;
-		this.sobreNome = sobreNome;
+		this.sobrenome = sobrenome;
 	}
 
 	public Long getIdentificador() {
@@ -21,8 +21,8 @@ public class Cliente {
 		return nome;
 	}
 
-	public String getSobreNome() {
-		return sobreNome;
+	public String getSobrenome() {
+		return sobrenome;
 	}	
 	
 	public void setConversa(Iteracao conv) {

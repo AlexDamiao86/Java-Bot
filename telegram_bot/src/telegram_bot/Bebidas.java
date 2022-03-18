@@ -1,5 +1,8 @@
 package telegram_bot;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+
 /**
  * Lista com todos os drinks disponíveis no menu 
  * A cada nova adicao de item deve ser vinculado um numero sequencial e inserido
@@ -9,11 +12,11 @@ package telegram_bot;
  */
 
 public enum Bebidas {
-	PINACOLADA(0, "Pina Colada",                 15.00),
-	CUBALIBRE( 1, "Cuba Libre",                  20.00),
-	CERVEJABUD(2, "Garrafa Budweiser 330ml",     12.00),
-	CAPIRINHA( 3, "Capirinha de limao",          14.00),
-	TEQUILA(   4, "Shot de Tequila Jose Cuervo", 22.00);
+	PINACOLADA(1, "Pina Colada",                 15.00),
+	CUBALIBRE( 2, "Cuba Libre",                  20.00),
+	CERVEJABUD(3, "Cerveja Budweiser 330ml",     12.00),
+	CAIPIRINHA(4, "Caipirinha de Limao",         14.00),
+	TEQUILA(   5, "Shot de Tequila Jose Cuervo", 22.00);
 	
 	private int item;
 	private String nomeBebida;
@@ -45,4 +48,24 @@ public enum Bebidas {
 	public double getPreco() {
 		return preco;
 	}
+	
+	public static String mostrarMenu() {
+		int tamlinha = 30;
+		String format = "0,00";
+		NumberFormat formatter = new DecimalFormat(format);
+		
+		String menu = "     ***  MENU DE BEBIDAS  ***"
+				+ "\n--------------------------------------";
+		for (Bebidas bebida : Bebidas.values()) {
+			menu+= "\n" +bebida.getNum()+ ". " +bebida.getNomeBebida();
+			
+			String linha ="";
+			while ((linha.length() + bebida.getNomeBebida().length()) < tamlinha ){
+				linha+= ".";
+			}
+			menu+=  linha+ " R$ " + formatter.format(bebida.getPreco());
+		}
+		return menu;
+	}
+
 }
