@@ -1,4 +1,4 @@
-package telegram_bot;
+package api_clima;
 
 import java.util.Scanner;
 /**
@@ -28,7 +28,7 @@ public class ConsultaClima {
 			longitude = teclado2.nextLine();
 			System.out.println(ClimaAPI.obtemDadosTemperaturaTexto(latitude, longitude));
 			temperatura = ClimaAPI.obtemDadosTemperaturaNumero(latitude, longitude);
-			System.out.println("Temperatura na lat/long:"+ latitude + "/" + longitude + " é " + temperatura + " graus");
+			System.out.println("Temperatura na lat/long:"+ latitude + "/" + longitude + " ï¿½ " + temperatura + " graus");
 			teclado1.close();
 			teclado2.close();
 			
@@ -39,7 +39,7 @@ public class ConsultaClima {
 				System.out.println(ClimaAPI.obtemDadosTemperaturaTexto(cidade));
 		
 				temperatura = ClimaAPI.obtemDadosTemperaturaNumero(cidade);
-				System.out.println("Temperatura em "+ cidade + " é " + temperatura + " graus");
+				System.out.println("Temperatura em "+ cidade + " ï¿½ " + temperatura + " graus");
 				teclado1.close();
 				teclado2.close();
 			}

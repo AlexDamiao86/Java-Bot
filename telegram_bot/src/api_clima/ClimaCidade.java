@@ -1,8 +1,8 @@
-package telegram_bot;
+package api_clima;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 /**
- * Classe utilizada para integração com API de clima da openweathermap.
+ * Classe utilizada para integraï¿½ï¿½o com API de clima da openweathermap.
  * Possui todos os dados retornados pela API.
  * @author Vanessa
  * @version 1.0

@@ -1,10 +1,10 @@
-package telegram_bot;
+package api_clima;
 
 import org.springframework.web.client.RestTemplate;
 
 /**
  * *Classe que faz o acesso aos dados da API de clima da openweathermap
- * Gerar o token no site da openweather e colocar na variável TOKEN.
+ * Gerar o token no site da openweather e colocar na variï¿½vel TOKEN.
  * @author Vanessa
  * @version 1.0
  */
