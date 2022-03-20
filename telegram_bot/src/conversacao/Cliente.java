@@ -1,14 +1,17 @@
 package conversacao;
 
+import java.util.ArrayList;
+import java.util.Stack;
+
 public class Cliente {
 	private Long identificador;
 	private String nome;
 	private String sobrenome;
-	private Iteracao conversa;
-	private String perguntaResposta;
+	private Stack<Conversa> conversas;
+	private ArrayList<Conta> contas;
 	
-	public Cliente(Long id, String nome, String sobrenome) {
-		this.identificador = id;
+	public Cliente(Long identificador, String nome, String sobrenome) {
+		this.identificador = identificador;
 		this.nome = nome;
 		this.sobrenome = sobrenome;
 	}
@@ -25,21 +28,21 @@ public class Cliente {
 		return sobrenome;
 	}	
 	
-	public void setConversa(Iteracao conv) {
-		this.conversa = conv;
-	}
-	
-	public String resposta() {
-		this.conversa.mudaEstado(perguntaResposta);
-		return this.conversa.getResposta();
-	}
-	
-	public void setPergunta(String perg) {
-		this.perguntaResposta = perg;
-	}
-	
 	@Override
 	public boolean equals(Object obj) {
 		return this.identificador.equals(((Cliente)obj).getIdentificador());
+	}
+	
+	public Conversa iniciarConversa(Long identificadorConversa) {
+		Conversa conversa = new Conversa(identificadorConversa, this); 
+		return this.conversas.push(conversa);
+	}
+	
+	public Conta abrirConta() {
+		Long idProximaConta = (long) (contas.size() + 1);
+		Conta conta = new Conta(idProximaConta, this);
+		this.contas.add(conta);
+		return conta;
+
 	}
 }

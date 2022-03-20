@@ -17,13 +17,11 @@ import conversacao.Cliente;
 import conversacao.Iteracao;
 
 public class Main {
-    
+	    
 	public static void main(String[] args) {
 		// Criacao do objeto bot com as informacoes de acesso.
 		TelegramBot bot = new TelegramBot("5129788142:AAHAyyEguv51zDQUeph6k4s_ABAZBiRVUUc");
-        
-		HashMap<Long, Cliente> clientes = new HashMap<Long, Cliente>();
-		
+        		
 		// Objeto responsavel por receber as mensagens.
 		GetUpdatesResponse updatesResponse;
 
@@ -52,22 +50,13 @@ public class Main {
 				// Atualizacao do off-set.
 				m = update.updateId() + 1;
 
+				System.out.println("UPDATE_ID :"  + update.updateId());
+				System.out.println("CHAT_ID   :"  + update.message().chat().id());
+				System.out.println("MESSAGE_ID:"  + update.message().messageId());
+				
 				System.out.println("Recebendo mensagem: " + update.message().text());
-				
-				Long idCliente = update.message().chat().id();
-				String nome = update.message().chat().firstName();
-				String sobrenome = update.message().chat().lastName();
-				Cliente cliente = new Cliente(idCliente, nome, sobrenome);
-				if (!clientes.containsKey(idCliente)) {
-				    Iteracao conversa = new Iteracao(cliente);
-				    cliente.setConversa(conversa);
-				    clientes.put(idCliente, cliente);
-				} else {
-					cliente = clientes.get(idCliente);
-				}
-				
-				cliente.setPergunta(update.message().text());
-				
+							
+				Cliente cliente = consultaCliente(update);
 				
 				// Envio de "Escrevendo" antes de enviar a resposta.
 				baseResponse = bot.execute(new SendChatAction(cliente.getIdentificador(), ChatAction.typing.name()));
@@ -83,5 +72,24 @@ public class Main {
 				
 			}
 		}
+	}
+
+	private static Cliente consultaCliente(Update update) {
+		HashMap<Long, Cliente> clientes = new HashMap<Long, Cliente>();
+
+		Long idCliente = update.message().chat().id();
+		String nome = update.message().chat().firstName();
+		String sobrenome = update.message().chat().lastName();
+		Cliente cliente = new Cliente(idCliente, nome, sobrenome);
+		if (!clientes.containsKey(idCliente)) {
+		    Iteracao conversa = new Iteracao(cliente);
+		    cliente.setConversa(conversa);
+		    clientes.put(idCliente, cliente);
+		} else {
+			cliente = clientes.get(idCliente);
+		}
+		
+		cliente.setPergunta(update.message().text());
+		return cliente;
 	}
 }

@@ -21,7 +21,7 @@ public class Garcom {
 		int opcao;
 		String resposta;
 		Pedido pedido = new Pedido();
-		Bebidas bebidaPedida[] = Bebidas.values();
+		Bebida bebidaPedida[] = Bebida.values();
 		
 		// saudacao inicial
 		Scanner teclado = new Scanner(System.in);
@@ -42,7 +42,7 @@ public class Garcom {
 					+ "\n99 Fechar a conta");
 			opcao = teclado.nextInt();
 			
-			if (opcao > 0 && opcao < Bebidas.values().length) {  //Pedido valido de bebidas
+			if (opcao > 0 && opcao < Bebida.values().length) {  //Pedido valido de bebidas
 				int quantidade = 0;
 				while (quantidade < 1) {   //Previne engraçadinhos de usar número negativo
 					System.out.println("Qual a quantidade?");
@@ -57,7 +57,7 @@ public class Garcom {
 				System.out.println("Qual item gostaria de retirar do pedido?");
 				mostrarMenu();
 				opcao = teclado.nextInt();
-				if (opcao > 0 && opcao < Bebidas.values().length) {
+				if (opcao > 0 && opcao < Bebida.values().length) {
 					int quantidade = 0;
 					while (quantidade < 1) {   //Previne engraçadinhos de usar número negativo
 						System.out.println("Qual a quantidade?");
@@ -80,7 +80,7 @@ public class Garcom {
 	private static void mostrarMenu() {
 		String menu = "              ***  MENU DE BEBIDAS  ***"
 				+ "\n---------------------------------------------------";
-		for (Bebidas bebida : Bebidas.values()) {
+		for (Bebida bebida : Bebida.values()) {
 			menu+= "\n" +bebida.getNum()+ ". " +bebida.getNomeBebida();
 			
 			String linha ="";

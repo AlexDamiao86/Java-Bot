@@ -2,40 +2,40 @@ package conversacao;
 
 import java.time.LocalDateTime;
 
-import telegram_bot.Bebidas;
+import telegram_bot.Bebida;
 
 public class Iteracao {
 	
-	private String estadoAtual;
+	private Estado estadoAtual;
 	private String resposta;
 	private Cliente cliente;
 	
 	public Iteracao(Cliente c) {
-		this.estadoAtual = "inicio";
+		this.estadoAtual = Estado.INICIO;
 		this.resposta = "Não Entendi...";
 		this.cliente = c;
 	}
 	
 	public boolean mudaEstado(String perguntaResposta) {
 		if (estadoAtual.equals("inicio") || ehSaudacao(perguntaResposta)) {
-			this.estadoAtual = "menu_inicio";
+			this.estadoAtual = Estado.INICIO;
 			this.resposta = "Oi, " + cliente.getNome()+ ", " + this.mostraSaudacao() + "! Seja Bem-Vindo ao BarBot!\n"
 					        + "Digite /Menu para consultar o Menu de Bebidas\nDigite /Ajuda para consultar a Lista de opções." ;
 			return true;
 		}
 		if (estadoAtual.equals("menu_inicio")&& perguntaResposta.equalsIgnoreCase("/menu")) {
-			this.estadoAtual = "menu_inicio";
-			this.resposta = Bebidas.mostrarMenu();
+			this.estadoAtual = Estado.INICIO;
+			this.resposta = Bebida.mostrarMenu();
 			return true;
 		}
 		if (estadoAtual.equals("menu_inicio")&& perguntaResposta.equalsIgnoreCase("/ajuda")) {
-			this.estadoAtual = "menu_inicio";
+			this.estadoAtual = Estado.INICIO;
 			this.resposta = mostrarOpcoes();
 			return true;
 		}
 		
 		if (estadoAtual.equals("menu_inicio")&& perguntaResposta.equalsIgnoreCase("/fazerpedido")) {
-			this.estadoAtual = "anota_pedido";
+			this.estadoAtual = Estado.CONTA_ABERTA;
 			this.resposta = "Digite o pedido no formato: Codigo - quantidade";
 			return true;
 		}

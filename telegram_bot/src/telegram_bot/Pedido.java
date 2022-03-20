@@ -16,7 +16,7 @@ public class Pedido {
 	 * com o tamanho do Enum Bebidas.
 	 */
 	public Pedido() {
-		quantidades = new int[Bebidas.values().length];
+		quantidades = new int[Bebida.values().length];
 		
 		for (int i = 0; i < quantidades.length; i++) {
 			quantidades[i] = 0;
@@ -29,7 +29,7 @@ public class Pedido {
 	 * @param qtd    A quantidade solicitada dessa bebida
 	 * @return Informação do pedido anotado ou de erro por quantidade
 	 */
-	public String anota(Bebidas bebida, int qtd) {
+	public String anota(Bebida bebida, int qtd) {
 		
 		if (qtd > 0) {                 //Evita que engraçadinhos façam pedidos negativos
 			quantidades[bebida.getNum()] += qtd;
@@ -45,7 +45,7 @@ public class Pedido {
 	 * @param qtd       Quantidade de bebidas que deve ser excluida do pedido
 	 * @return Resposta para o cliente sobre o sucesso ou o motivo de falha do pedido
 	 */
-	public String risca(Bebidas bebida, int qtd) {
+	public String risca(Bebida bebida, int qtd) {
 		
 		if (quantidades[bebida.getNum()] == 0) {
 			return ("Não houve nenhum pedido de " + bebida.getNomeBebida() + " até o momento.");
@@ -65,7 +65,7 @@ public class Pedido {
 	public String consulta() {
 		String consulta = "\nCONSULTA DE COMANDA" +criaLinha();
 		
-		for (Bebidas bebida : Bebidas.values()) {
+		for (Bebida bebida : Bebida.values()) {
 			if (quantidades[bebida.getNum()] > 0) {
 				consulta += ("\n" +bebida.getNomeBebida());
 				String linha = "";
@@ -112,7 +112,7 @@ public class Pedido {
 	public void gerarConta() {
 		double total = 0;
 		System.out.println("\n*** DEMONSTRATIVO DE CUSTOS DO PEDIDO ***\n*");
-		for (Bebidas bebida : Bebidas.values()) {
+		for (Bebida bebida : Bebida.values()) {
 			if (quantidades[bebida.getNum()] > 0) {
 				double totalDaBebida = quantidades[bebida.getNum()]*bebida.getPreco();
 				System.out.println("* "+quantidades[bebida.getNum()] +" "+bebida.getNomeBebida()+" ........ R$ "+ totalDaBebida);
