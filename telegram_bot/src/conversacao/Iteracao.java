@@ -2,6 +2,7 @@ package conversacao;
 
 import java.time.LocalDateTime;
 
+import api_clima.ClimaAPI;
 import telegram_bot.Bebidas;
 
 public class Iteracao {
@@ -20,7 +21,9 @@ public class Iteracao {
 		if (estadoAtual.equals("inicio") || ehSaudacao(perguntaResposta)) {
 			this.estadoAtual = "menu_inicio";
 			this.resposta = "Oi, " + cliente.getNome()+ ", " + this.mostraSaudacao() + "! Seja Bem-Vindo ao BarBot!\n"
-					        + "Digite /Menu para consultar o Menu de Bebidas\nDigite /Ajuda para consultar a Lista de opções." ;
+		                    + checaTemperaturaSugere() +"\n" 			
+					        + "Digite /FazerPedido para inciar um pedido\nDigite /Ajuda para consultar a Lista de opções." ;
+			
 			return true;
 		}
 		if (estadoAtual.equals("menu_inicio")&& perguntaResposta.equalsIgnoreCase("/menu")) {
@@ -76,6 +79,21 @@ public class Iteracao {
 		}
 
 		return saudacao;		
+	}
+	
+	private String checaTemperaturaSugere() {
+	    Double temp;
+		try {
+			temp = ClimaAPI.obtemDadosTemperaturaNumero("Brasilia");
+			if (temp > 24.5) {	
+				return "Hoje está quente em Brasília ( "+temp+ " ), te recomendo tomar uma cerveja!";
+			}
+			return "Hoje está frio em Brasilia( "+temp+ " ), te recomendo tomar um vinho!";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return " não foi possivel consultar o clima de hoje";
+		} 
+		
 	}
     
 }

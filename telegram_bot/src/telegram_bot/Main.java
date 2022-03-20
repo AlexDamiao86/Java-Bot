@@ -20,7 +20,7 @@ public class Main {
     
 	public static void main(String[] args) {
 		// Criacao do objeto bot com as informacoes de acesso.
-		TelegramBot bot = new TelegramBot("5129788142:AAHAyyEguv51zDQUeph6k4s_ABAZBiRVUUc");
+		TelegramBot bot = new TelegramBot("5075462972:AAGPg6M1OxG-AmkN-x9WfYRFH3VL4RZCXj4");
         
 		HashMap<Long, Cliente> clientes = new HashMap<Long, Cliente>();
 		
