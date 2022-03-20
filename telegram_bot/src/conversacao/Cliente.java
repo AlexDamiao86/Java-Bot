@@ -7,8 +7,8 @@ public class Cliente {
 	private Long identificador;
 	private String nome;
 	private String sobrenome;
-	private Stack<Conversa> conversas;
-	private ArrayList<Conta> contas;
+	private Stack<Conversa> conversas = new Stack<Conversa>();
+	private ArrayList<Conta> contas = new ArrayList<Conta>();
 	
 	public Cliente(Long identificador, String nome, String sobrenome) {
 		this.identificador = identificador;
@@ -38,7 +38,6 @@ public class Cliente {
 		Conta conta = new Conta(idProximaConta, this);
 		this.contas.add(conta);
 		return conta;
-
 	}
 	
 	@Override

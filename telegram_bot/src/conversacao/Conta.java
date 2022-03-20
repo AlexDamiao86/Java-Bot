@@ -11,7 +11,7 @@ public class Conta {
 	private LocalDateTime dataHoraAbertura; 
 	private LocalDateTime dataHoraEncerramento;
 	private Cliente cliente;
-	private ArrayList<Pedido> pedidos;
+	private ArrayList<Pedido> pedidos = new ArrayList<Pedido>();
 	
 	public Conta(Long identificador, Cliente cliente) {
 		this.identificador = identificador; 
@@ -49,14 +49,23 @@ public class Conta {
 		return this.pedidos.add(pedido);
 	}
 	
+	private BigDecimal valorTotalConta() {
+		BigDecimal somaValorPedidos = new BigDecimal(0.00);
+
+		for (Pedido pedido: pedidos) {
+			somaValorPedidos = somaValorPedidos.add(pedido.getValorPedido());
+			
+		}
+		return somaValorPedidos;
+	}
+	
 	public String mostrarParcialConta() {
 		
 		final int TAM_LINHA = 40;
-		BigDecimal somaValorPedidos = new BigDecimal(0.00);
 		String linha = "";
 		
-		String cupom = "      ***  DEMONSTRATIVO CONTA  ***"
-				+ "\n------------------------------------------";
+		String cupom = "         ***  DEMONSTRATIVO CONTA  ***"
+				+ "\n-------------------------------------------------";
 				
 		for (Pedido pedido: pedidos) {
 			linha = "\n" + pedido.getQuantidade() + " "  
@@ -68,27 +77,25 @@ public class Conta {
 			
 			linha += " R$ " + pedido.getValorPedido().setScale(2);
 			cupom += linha;
-			
-			somaValorPedidos.add(pedido.getValorPedido());
-			
+						
 			linha = "";      
 		}
-		
-		linha = "\n *** VALOR TOTAL DA CONTA";
+		cupom += "\n-------------------------------------------------";
+		linha = "\nVALOR TOTAL DA CONTA";
 		while (linha.length() < TAM_LINHA) {
 			linha += ".";
 		}
-		linha += " R$ " + somaValorPedidos.setScale(2);
+		linha += " R$ " + valorTotalConta().setScale(2);
 		cupom += linha;
+		cupom += "\n-------------------------------------------------";
 
 		return cupom;
 	}
 	
-	public void encerrarConta() {
-		this.mostrarParcialConta();
+	public String encerrarConta() {
 		this.situacao = EstadoConta.CONTA_ENCERRADA;
 		this.dataHoraEncerramento = LocalDateTime.now();
+		return this.mostrarParcialConta();
 	}
 	
-
 }
