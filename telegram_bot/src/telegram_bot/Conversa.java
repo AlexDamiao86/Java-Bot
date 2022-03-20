@@ -8,14 +8,14 @@ public class Conversa {
 	private LocalDateTime dataHoraInicio;
 	private LocalDateTime dataHoraFim;
 	private Cliente cliente;
-	private Interacao interacaoAtual;
+	private EstadoIteracao iteracaoAtual;
 	
 	public Conversa(Long identificador, Cliente cliente) {
 		this.identificador = identificador;
 		this.dataHoraInicio = LocalDateTime.now();
 		this.dataHoraInicio = null;
 		this.cliente = cliente;
-		this.interacaoAtual = null;
+		this.iteracaoAtual = EstadoIteracao.INICIO;
 	}
 	
 	public Long getIdentificador() {
@@ -34,16 +34,17 @@ public class Conversa {
 		return cliente;
 	}
 
-	public Interacao getInteracaoAtual() {
-		return interacaoAtual;
+	public EstadoIteracao getInteracaoAtual() {
+		return iteracaoAtual;
 	}
 
-	public void mudarInteracaoAtual(Interacao interacao) {
-		this.interacaoAtual = interacao; 
+	public void mudarInteracaoAtual(EstadoIteracao interacao) {
+		iteracaoAtual = interacao; 
 	}
 	
 	public void encerrarConversa() {
-		this.dataHoraFim = LocalDateTime.now();
+		mudarInteracaoAtual(EstadoIteracao.FIM);
+		dataHoraFim = LocalDateTime.now();
 	}
 	
 }
