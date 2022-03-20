@@ -40,13 +40,11 @@ public enum Bebida {
 		return preco;
 	}
 
-	public String mostrarMenuBebidas() {
+	public static String mostrarMenuBebidas() {
 		int tamlinha = 30;
-		String format = "0,00";
-		NumberFormat formatter = new DecimalFormat(format);
 		
-		String menu = "     ***  MENU DE BEBIDAS  ***"
-				+ "\n--------------------------------------";
+		String menu = "         ***  MENU DE BEBIDAS  ***"
+				+ "\n------------------------------------------";
 		for (Bebida bebida : Bebida.values()) {
 			menu+= "\n" + bebida.getIdentificador()+ ". " 
 						+ bebida.getDescricao();
@@ -54,7 +52,7 @@ public enum Bebida {
 			while ((linha.length() + bebida.getDescricao().length()) < tamlinha) {
 				linha += ".";
 			}
-			menu += linha+ " R$ " + formatter.format(bebida.getPreco());
+			menu += linha + " R$ " + bebida.getPreco().setScale(2);
 		}
 		return menu;
 	}
