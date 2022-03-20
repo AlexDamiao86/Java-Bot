@@ -13,7 +13,7 @@ public class Conversa {
 	public Conversa(Long identificador, Cliente cliente) {
 		this.identificador = identificador;
 		this.dataHoraInicio = LocalDateTime.now();
-		this.dataHoraInicio = null;
+		this.dataHoraFim = null;
 		this.cliente = cliente;
 		this.iteracaoAtual = EstadoIteracao.INICIO;
 	}

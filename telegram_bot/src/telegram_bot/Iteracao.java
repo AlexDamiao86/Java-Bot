@@ -4,12 +4,12 @@ import java.time.LocalDateTime;
 
 public class Iteracao {
 	
-	private Estado estadoAtual;
+	private EstadoIteracao estadoAtual;
 	private String resposta;
 	private Cliente cliente;
 	
 	public Iteracao(Cliente c) {
-		this.estadoAtual = Estado.INICIO;
+		this.estadoAtual = EstadoIteracao.INICIO;
 		this.resposta = "Não Entendi...";
 		this.cliente = c;
 	}
