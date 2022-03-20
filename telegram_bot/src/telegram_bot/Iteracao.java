@@ -4,16 +4,36 @@ import java.time.LocalDateTime;
 
 public class Iteracao {
 	
-	private EstadoIteracao iteracao;
-	private String estimuloCliente;
-	private String respostaBot;	
+	private String estimulo;
+	private Conversa conversa;
 	
-	public String devolveRespostaBot(String estimuloCliente) {
+	public Iteracao(Conversa conversa) {
+		this.setConversa(conversa);
+	}
+	
+	public String getEstimulo() {
+		return estimulo;
+	}
+
+	public void setEstimulo(String estimulo) {
+		this.estimulo = estimulo;
+	}
+
+	public Conversa getConversa() {
+		return conversa;
+	}
+
+	public void setConversa(Conversa conversa) {
+		this.conversa = conversa;
+	}
+	
+	public String devolveRespostaBot(String estimulo) {
 		
-		String estimuloClienteLC = estimuloCliente.toLowerCase();
+		String estimuloLC = estimulo.toLowerCase();
 		
-		switch (this.iteracao.name()) {
+		switch (conversa.getIteracaoAtual().name()) {
 		case "INICIO": 
+			
 		case "PEDIDO_PRODUTO": 
 		case "PEDIDO_QUANTIDADE": 
 		case "PEDIDO_ADICIONADO":
@@ -22,7 +42,8 @@ public class Iteracao {
 		case "FIM":
 			break;
 		}
-		return estimuloCliente;
+		
+		return estimuloClienteLC;
 	}
 
 	
