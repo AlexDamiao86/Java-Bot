@@ -16,8 +16,11 @@ import com.pengrad.telegrambot.response.SendResponse;
 public class Main {
 	    
 	public static void main(String[] args) {
+		
+		final String MEU_BOT = "5129788142:AAHAyyEguv51zDQUeph6k4s_ABAZBiRVUUc"; 
+		
 		// Criacao do objeto bot com as informacoes de acesso.
-		TelegramBot bot = new TelegramBot("5129788142:AAHAyyEguv51zDQUeph6k4s_ABAZBiRVUUc");
+		TelegramBot bot = new TelegramBot(MEU_BOT);
         		
 		// Objeto responsavel por receber as mensagens.
 		GetUpdatesResponse updatesResponse;

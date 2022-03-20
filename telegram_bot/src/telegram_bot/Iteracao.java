@@ -4,15 +4,27 @@ import java.time.LocalDateTime;
 
 public class Iteracao {
 	
-	private EstadoIteracao estadoAtual;
-	private String resposta;
-	private Cliente cliente;
+	private EstadoIteracao iteracao;
+	private String estimuloCliente;
+	private String respostaBot;	
 	
-	public Iteracao(Cliente c) {
-		this.estadoAtual = EstadoIteracao.INICIO;
-		this.resposta = "Não Entendi...";
-		this.cliente = c;
+	public String devolveRespostaBot(String estimuloCliente) {
+		
+		String estimuloClienteLC = estimuloCliente.toLowerCase();
+		
+		switch (this.iteracao.name()) {
+		case "INICIO": 
+		case "PEDIDO_PRODUTO": 
+		case "PEDIDO_QUANTIDADE": 
+		case "PEDIDO_ADICIONADO":
+		case "CONTA_PARCIAL":
+		case "CONTA_ENCERRA":
+		case "FIM":
+			break;
+		}
+		return estimuloCliente;
 	}
+
 	
 	public boolean mudaEstado(String perguntaResposta) {
 		if (estadoAtual.equals("inicio") || ehSaudacao(perguntaResposta)) {

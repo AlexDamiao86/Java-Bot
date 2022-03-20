@@ -34,16 +34,16 @@ public class Conversa {
 		return cliente;
 	}
 
-	public EstadoIteracao getInteracaoAtual() {
+	public EstadoIteracao getIteracaoAtual() {
 		return iteracaoAtual;
 	}
 
-	public void mudarInteracaoAtual(EstadoIteracao interacao) {
+	public void mudarIteracaoAtual(EstadoIteracao interacao) {
 		iteracaoAtual = interacao; 
 	}
 	
 	public void encerrarConversa() {
-		mudarInteracaoAtual(EstadoIteracao.FIM);
+		mudarIteracaoAtual(EstadoIteracao.FIM);
 		dataHoraFim = LocalDateTime.now();
 	}
 	

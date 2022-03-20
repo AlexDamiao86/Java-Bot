@@ -19,7 +19,7 @@ public class ConversaTest {
 		assertNotNull(conversa.getDataHoraInicio());
 		assertNull(conversa.getDataHoraFim());
 		assertEquals(cliente, conversa.getCliente());
-		assertEquals(EstadoIteracao.INICIO, conversa.getInteracaoAtual());
+		assertEquals(EstadoIteracao.INICIO, conversa.getIteracaoAtual());
 	}
 	
 	@Test
@@ -30,6 +30,6 @@ public class ConversaTest {
 		assertNotNull(conversa.getDataHoraInicio());
 		assertNotNull(conversa.getDataHoraFim());
 		assertEquals(cliente, conversa.getCliente());
-		assertEquals(EstadoIteracao.FIM, conversa.getInteracaoAtual());
+		assertEquals(EstadoIteracao.FIM, conversa.getIteracaoAtual());
 	}
 }
