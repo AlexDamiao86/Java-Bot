@@ -14,15 +14,16 @@ public class Pedido {
 	private LocalDateTime dataHoraPedido;
 	private BigDecimal valorPedido;
 	
-	public Pedido(int identificador, Conta conta, Bebida bebida, int quantidade, BigDecimal valorPedido) {
+	public Pedido(int identificador, Conta conta, Bebida bebida, int quantidade) {
 		this.identificador = identificador;
 		this.conta = conta;
 		this.bebida = bebida;
 		this.quantidade = quantidade;
-		this.dataHoraPedido = LocalDateTime.now();
-		this.valorPedido = valorPedido;
+		this.dataHoraPedido = LocalDateTime.now();		
+		BigDecimal bdQuantidade = BigDecimal.valueOf(quantidade); 
+		this.valorPedido = bebida.getPreco().multiply(bdQuantidade);
 	}
-
+	
 	public int getIdentificador() {
 		return identificador;
 	}

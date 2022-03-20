@@ -41,18 +41,20 @@ public enum Bebida {
 	}
 
 	public static String mostrarMenuBebidas() {
-		int tamlinha = 30;
+		final int TAM_LINHA = 40;
+		String linha = "";
 		
-		String menu = "         ***  MENU DE BEBIDAS  ***"
-				+ "\n------------------------------------------";
+		String menu = "             ***  MENU DE BEBIDAS  ***"
+				+ "\n------------------------------------------------";
 		for (Bebida bebida : Bebida.values()) {
-			menu+= "\n" + bebida.getIdentificador()+ ". " 
-						+ bebida.getDescricao();
-			String linha = "";
-			while ((linha.length() + bebida.getDescricao().length()) < tamlinha) {
+			linha = "\n" + bebida.getIdentificador()+ ". " 
+					     + bebida.getDescricao();
+			while (linha.length() < TAM_LINHA) {
 				linha += ".";
 			}
-			menu += linha + " R$ " + bebida.getPreco().setScale(2);
+			linha += " R$ " + bebida.getPreco().setScale(2);
+			menu  += linha;
+			linha = "";
 		}
 		return menu;
 	}

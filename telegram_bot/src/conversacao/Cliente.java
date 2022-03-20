@@ -28,11 +28,6 @@ public class Cliente {
 		return sobrenome;
 	}	
 	
-	@Override
-	public boolean equals(Object obj) {
-		return this.identificador.equals(((Cliente)obj).getIdentificador());
-	}
-	
 	public Conversa iniciarConversa(Long identificadorConversa) {
 		Conversa conversa = new Conversa(identificadorConversa, this); 
 		return this.conversas.push(conversa);
@@ -45,4 +40,10 @@ public class Cliente {
 		return conta;
 
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		return this.identificador.equals(((Cliente)obj).getIdentificador());
+	}
+	
 }
