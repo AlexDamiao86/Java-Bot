@@ -1,9 +1,9 @@
 package test;
 
-import conversacao.Cliente;
-import conversacao.Conta;
-import conversacao.Pedido;
 import telegram_bot.Bebida;
+import telegram_bot.Cliente;
+import telegram_bot.Conta;
+import telegram_bot.Pedido;
 
 public class ContaTest {
 	

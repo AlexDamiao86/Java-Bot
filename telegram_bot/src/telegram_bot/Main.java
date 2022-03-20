@@ -13,9 +13,6 @@ import com.pengrad.telegrambot.response.BaseResponse;
 import com.pengrad.telegrambot.response.GetUpdatesResponse;
 import com.pengrad.telegrambot.response.SendResponse;
 
-import conversacao.Cliente;
-import conversacao.Iteracao;
-
 public class Main {
 	    
 	public static void main(String[] args) {

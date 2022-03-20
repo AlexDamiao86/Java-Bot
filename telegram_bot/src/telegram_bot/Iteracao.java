@@ -1,8 +1,6 @@
-package conversacao;
+package telegram_bot;
 
 import java.time.LocalDateTime;
-
-import telegram_bot.Bebida;
 
 public class Iteracao {
 	

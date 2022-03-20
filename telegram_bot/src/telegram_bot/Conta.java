@@ -1,4 +1,4 @@
-package conversacao;
+package telegram_bot;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

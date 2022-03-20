@@ -1,4 +1,4 @@
-package conversacao;
+package telegram_bot;
 
 public enum EstadoConta {
 	
