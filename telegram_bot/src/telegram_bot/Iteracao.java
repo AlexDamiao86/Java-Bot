@@ -1,59 +1,117 @@
 package telegram_bot;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import com.pengrad.telegrambot.model.request.Keyboard;
+import com.pengrad.telegrambot.model.request.KeyboardButton;
 import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
 
 public class Iteracao {
-	
+
 	private Conversa conversa;
 	private String estimulo;
-	private RespostaBot resposta;
-	
-	public Iteracao(Conversa conversa) {
-		this.setConversa(conversa);
-		this.setEstimulo("");
-	}
-	
-	public String getEstimulo() {
-		return estimulo;
-	}
 
-	public void setEstimulo(String estimulo) {
+	public Iteracao(Conversa conversa, String estimulo) {
+		this.conversa = conversa;
 		this.estimulo = estimulo;
 	}
 
-	public void setConversa(Conversa conversa) {
-		this.conversa = conversa;
+	public String getEstimulo() {
+		return estimulo;
+	}
+	
+	private boolean ehSaudacao() { 
+		return estimulo.matches("^(o|O)i{0,1}|^(B|b)om (D|d)ia{0,1}|^(B|b)oa (t|T)arde{0,1}|^(B|b)oa (n|N)oite{0,1}"); 
+	}
+
+	private void verificarSeMudaEstado() {
+		
+		switch (conversa.getIteracaoAtual().name()) {
+		case "INICIO":
+			if (estimulo.equalsIgnoreCase("PEDIDO")) {
+				conversa.mudarIteracaoAtual(EstadoIteracao.PEDIDO_PRODUTO);
+			}
+			if (estimulo.equalsIgnoreCase("AJUDA")) {
+				conversa.mudarIteracaoAtual(EstadoIteracao.PEDIDO_AJUDA);
+			}
+			if (estimulo.equalsIgnoreCase("SAIR")) {
+				conversa.encerrarConversa();
+			}
+			break;
+		case "PEDIDO_PRODUTO": 
+			if (estimulo.equalsIgnoreCase("SAIR")) {
+				conversa.encerrarConversa();
+			}
+		default:
+			break;
+		}
+		
 	}
 	
 	public RespostaBot devolverResposta() {
+
+		RespostaBot resposta = null;
+		ArrayList<String> texto = new ArrayList<String>();
+
+		if(ehSaudacao()) {
+			texto.add(this.mostraSaudacao() + ", " + conversa.getCliente().getNome() + "! Belezinha?");
+		};
 		
+		verificarSeMudaEstado();
+	
 		switch (conversa.getIteracaoAtual().name()) {
-		case "INICIO": 
-			String[] linhasTexto = new String[5];
-			linhasTexto[0] = "Oi, " + conversa.getCliente().getNome() + ", " + 
-					this.mostraSaudacao() + "! Seja bem-vindo ao BarBot!";
-			linhasTexto[1] = "Hoje o dia está bem quente, ideal para um happy hour com os amigos!";
-			linhasTexto[2] = "Selecione FAZER PEDIDO ou AJUDA para consultar a lista de opções:";
-				
-			String[] botoesMenuInicial = new String[2];
-			botoesMenuInicial[0] = "FAZER PEDIDO";
-			botoesMenuInicial[1] = "AJUDA"; 
-			Keyboard keyMenuInicial = new ReplyKeyboardMarkup(botoesMenuInicial).resizeKeyboard(true).oneTimeKeyboard(true);
-				
-			resposta = new RespostaBot(linhasTexto, keyMenuInicial);
+		case "INICIO":
+			texto.add("Oi, " + conversa.getCliente().getNome() + ", " + this.mostraSaudacao()
+					+ "! Seja bem-vindo ao BarBot!");
+			texto.add("Hoje o dia está bem quente, ideal para um happy hour com os amigos!");
+			texto.add("Selecione PEDIDO ou AJUDA para consultar a lista de opções:");
+
+			// Alternativa para usar teclado com botoes na mesma linha
+			// String[] botoesMenuInicial = new String[2];
+			// botoesMenuInicial[0] = "PEDIDO";
+			// botoesMenuInicial[1] = "AJUDA";
+			// Keyboard keyMenuInicial = new
+			// ReplyKeyboardMarkup(botoesMenuInicial).resizeKeyboard(true).oneTimeKeyboard(true);
+
+			Keyboard keyInicio = new ReplyKeyboardMarkup(
+					new KeyboardButton[] { new KeyboardButton("PEDIDO")},
+					new KeyboardButton[] { new KeyboardButton("AJUDA")}, 
+					new KeyboardButton[] { new KeyboardButton("SAIR")})
+					.resizeKeyboard(true).oneTimeKeyboard(true);
+
+			resposta = new RespostaBot(texto, keyInicio);
 			break;
-		case "PEDIDO_PRODUTO": 
-		case "PEDIDO_QUANTIDADE": 
+		case "PEDIDO_PRODUTO":
+			texto.add(conversa.getCliente().getNome() + ", me diga qual bebida deseja: ");
+			
+			String[] botoesBebidas = new String[Bebida.values().length];
+			
+			for (Bebida bebida : Bebida.values()) {
+				botoesBebidas[bebida.getIdentificador() - 1] = bebida.getDescricao();
+			}
+		
+			Keyboard keyPedidoProduto = 
+					new ReplyKeyboardMarkup(Arrays.copyOfRange(botoesBebidas, 0, 4))
+						.resizeKeyboard(true).oneTimeKeyboard(true).addRow(
+								new KeyboardButton[] { new KeyboardButton("SAIR")});
+			
+			resposta = new RespostaBot(texto, keyPedidoProduto);
+			break;
+		case "PEDIDO_QUANTIDADE":
 		case "PEDIDO_ADICIONADO":
 		case "CONTA_PARCIAL":
 		case "CONTA_ENCERRA":
 		case "FIM":
+			texto.add("Tchau, até logo! Te espero por aqui para uma próxima visita!!");
+			resposta = new RespostaBot(texto);
 			break;
+		default: 
+			texto.add("Nao entendi.. Tecle AJUDA para ver as opções disponiveis");
+			resposta = new RespostaBot(texto);
 		}
-		
+
 		return resposta;
 	}
 
@@ -77,32 +135,27 @@ public class Iteracao {
 	 * 
 	 * return false; }
 	 * 
-	 * private boolean ehSaudacao(String perguntaResposta) { return
-	 * perguntaResposta.
-	 * matches("^(o|O)i!{0,1}|^(B|b)om (D|d)ia!{0,1}|^(B|b)oa (t|T)arde!{0,1}|^(B|b)oa (n|N)oite!{0,1}"
-	 * ); }
-	 * 
 	 * private String mostrarOpcoes() { String result = "/FazerPedido"
 	 * +"\n/ConsultarPedido" +"\n/Menu" +"\n/RetirarPedido" +"\n/Sair"; return
 	 * result; }
 	 */
-	
+
 	private String mostraSaudacao() {
-		
+
 		String saudacao = "";
 		int horaAtual = LocalDateTime.now().getHour();
 
 		if (horaAtual <= 4) {
-			saudacao = "boa noite"; 
-		} else if(horaAtual <= 11 ) { 
+			saudacao = "boa noite";
+		} else if (horaAtual <= 11) {
 			saudacao = "bom dia";
-		} else if(horaAtual <= 17) {
+		} else if (horaAtual <= 17) {
 			saudacao = "boa tarde";
 		} else {
 			saudacao = "boa noite";
 		}
 
-		return saudacao;		
+		return saudacao;
 	}
-    
+
 }
