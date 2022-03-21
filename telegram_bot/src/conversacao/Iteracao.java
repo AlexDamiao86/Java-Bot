@@ -26,26 +26,48 @@ public class Iteracao {
 			
 			return true;
 		}
-		if (estadoAtual.equals("menu_inicio")&& perguntaResposta.equalsIgnoreCase("/menu")) {
-			this.estadoAtual = "menu_inicio";
-			this.resposta = Bebidas.mostrarMenu();
+		
+		if (estadoAtual.equals("menu_inicio")&& perguntaResposta.equalsIgnoreCase("/FazerPedido")) {
+			this.estadoAtual = "anota_pedido";
+			this.resposta = Bebidas.mostrarMenu() + "\n" + "Digite o pedido no formato: Bebida-Quantidade";
 			return true;
 		}
-		if (estadoAtual.equals("menu_inicio")&& perguntaResposta.equalsIgnoreCase("/ajuda")) {
+		
+		if (estadoAtual.equals("menu_inicio")&& perguntaResposta.equalsIgnoreCase("/Ajuda")) {
 			this.estadoAtual = "menu_inicio";
 			this.resposta = mostrarOpcoes();
 			return true;
 		}
 		
-		if (estadoAtual.equals("menu_inicio")&& perguntaResposta.equalsIgnoreCase("/fazerpedido")) {
-			this.estadoAtual = "anota_pedido";
-			this.resposta = "Digite o pedido no formato: Codigo - quantidade";
+		if (estadoAtual.equals("anota_pedido")&& ehPedido(perguntaResposta)){
+			this.estadoAtual = "mais_pedido";
+			this.resposta = "Pedido Anotado!";
+		}
+		
+		if (estadoAtual.equals("mais_pedido")&& ehPedido(perguntaResposta)){
+			this.estadoAtual = "mais_pedido";
+			this.resposta = "Pedido Anotado! \n Digite /ConsultarComanda para verificar o pedido.\n Digite /Sair para encerrar o pedido ";
+		}
+		
+		if (estadoAtual.equals("mais_pedido")&& perguntaResposta.equalsIgnoreCase("/sair")) {
+			this.estadoAtual = "encerramento";
+			this.resposta = "O valor a pagar eh: ... "+ " Tchau," + cliente.getNome()+ " ,Até logo!";
+			return true;
+		}
+		
+		if (estadoAtual.equals("menu_inicio")&& perguntaResposta.equalsIgnoreCase("/sair")) {
+			this.estadoAtual = "encerramento";
+			this.resposta = "Tchau," + cliente.getNome()+ " ,Até logo!";
 			return true;
 		}
 		
 		return false;
 	} 
 	
+	private boolean ehPedido(String perguntaResposta) {
+		return perguntaResposta.matches("[a-zA-Z ]+\\-[0-9]+");
+	}
+
 	private boolean ehSaudacao(String perguntaResposta) {
 		return perguntaResposta.matches("^(o|O)i!{0,1}|^(B|b)om (D|d)ia!{0,1}|^(B|b)oa (t|T)arde!{0,1}|^(B|b)oa (n|N)oite!{0,1}");
 	}
@@ -57,8 +79,6 @@ public class Iteracao {
 	private String mostrarOpcoes() {
 		String result = "/FazerPedido"
 	                +"\n/ConsultarPedido"
-	                +"\n/Menu"
-	                +"\n/RetirarPedido"
 	                +"\n/Sair";
 		return result;
 	}
@@ -86,14 +106,13 @@ public class Iteracao {
 		try {
 			temp = ClimaAPI.obtemDadosTemperaturaNumero("Brasilia");
 			if (temp > 24.5) {	
-				return "Hoje está quente em Brasília ( "+temp+ " ), te recomendo tomar uma cerveja!";
+				return "Hoje está quente em Brasília: "+temp+ " ºC, te recomendo tomar uma cerveja!";
 			}
-			return "Hoje está frio em Brasilia( "+temp+ " ), te recomendo tomar um vinho!";
+			return "Hoje está frio em Brasilia: "+temp+ " ºC, te recomendo tomar um vinho!";
 		} catch (Exception e) {
 			e.printStackTrace();
-			return " não foi possivel consultar o clima de hoje";
+			return "Não foi possivel consultar o clima de hoje";
 		} 
-		
 	}
     
 }

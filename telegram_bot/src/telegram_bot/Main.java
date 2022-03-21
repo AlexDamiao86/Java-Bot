@@ -1,11 +1,14 @@
 package telegram_bot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.request.ChatAction;
+import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
+import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.request.GetUpdates;
 import com.pengrad.telegrambot.request.SendChatAction;
 import com.pengrad.telegrambot.request.SendMessage;
@@ -17,13 +20,13 @@ import conversacao.Cliente;
 import conversacao.Iteracao;
 
 public class Main {
-    
+
 	public static void main(String[] args) {
 		// Criacao do objeto bot com as informacoes de acesso.
 		TelegramBot bot = new TelegramBot("5075462972:AAGPg6M1OxG-AmkN-x9WfYRFH3VL4RZCXj4");
-        
+
 		HashMap<Long, Cliente> clientes = new HashMap<Long, Cliente>();
-		
+
 		// Objeto responsavel por receber as mensagens.
 		GetUpdatesResponse updatesResponse;
 
@@ -53,35 +56,35 @@ public class Main {
 				m = update.updateId() + 1;
 
 				System.out.println("Recebendo mensagem: " + update.message().text());
-				
+
 				Long idCliente = update.message().chat().id();
 				String nome = update.message().chat().firstName();
 				String sobrenome = update.message().chat().lastName();
 				Cliente cliente = new Cliente(idCliente, nome, sobrenome);
 				if (!clientes.containsKey(idCliente)) {
-				    Iteracao conversa = new Iteracao(cliente);
-				    cliente.setConversa(conversa);
-				    clientes.put(idCliente, cliente);
+					Iteracao conversa = new Iteracao(cliente);
+					cliente.setConversa(conversa);
+					clientes.put(idCliente, cliente);
 				} else {
 					cliente = clientes.get(idCliente);
 				}
-				
+
 				cliente.setPergunta(update.message().text());
-				
-				
 				// Envio de "Escrevendo" antes de enviar a resposta.
 				baseResponse = bot.execute(new SendChatAction(cliente.getIdentificador(), ChatAction.typing.name()));
-
+				
 				// Verificacao de acao de chat foi enviada com sucesso.
 				System.out.println("Resposta de Chat Action Enviada? " + baseResponse.isOk());
-
+                
 				// Envio da mensagem de resposta.
-				sendResponse = bot.execute(new SendMessage(cliente.getIdentificador(), cliente.resposta()));
+				sendResponse = bot.execute(new SendMessage(cliente.getIdentificador(), cliente.getResposta()));
 
 				// Verificacao de mensagem enviada com sucesso.
 				System.out.println("Mensagem Enviada? " + sendResponse.isOk());
-				
+
 			}
 		}
 	}
+
+	
 }

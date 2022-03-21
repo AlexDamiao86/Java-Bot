@@ -29,7 +29,7 @@ public class Cliente {
 		this.conversa = conv;
 	}
 	
-	public String resposta() {
+	public String getResposta() {
 		this.conversa.mudaEstado(perguntaResposta);
 		return this.conversa.getResposta();
 	}
