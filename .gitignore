@@ -1,1 +1,6 @@
 telegram_bot/.vscode/settings.json
+telegram_bot/target
+telegram_bot/.project
+telegram_bot/.classpath
+telegram_bot/.settings
+telegram_bot/.gitignore
