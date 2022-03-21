@@ -10,7 +10,7 @@ public class Conversa {
 	private Cliente cliente;
 	private EstadoIteracao iteracaoAtual;
 	
-	public Conversa(Long identificador, Cliente cliente) {
+	protected Conversa(Long identificador, Cliente cliente) {
 		this.identificador = identificador;
 		this.dataHoraInicio = LocalDateTime.now();
 		this.dataHoraFim = null;

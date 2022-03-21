@@ -50,46 +50,74 @@ public class Main {
 				// Atualizacao do off-set.
 				m = update.updateId() + 1;
 
-				System.out.println("UPDATE_ID :"  + update.updateId());
+				System.out.println(":: DISPLAY APENAS PARA TESTES ::");
+				System.out.println("USER_ID   :"  + update.message().from().id());
 				System.out.println("CHAT_ID   :"  + update.message().chat().id());
+				System.out.println("UPDATE_ID :"  + update.updateId());
 				System.out.println("MESSAGE_ID:"  + update.message().messageId());
 				
 				System.out.println("Recebendo mensagem: " + update.message().text());
 							
-				Cliente cliente = consultaCliente(update);
+				Cliente cliente = consultarCliente(update);
+				
+				Long idConversa = update.message().chat().id();
+				Conversa conversa = cliente.iniciarConversa(idConversa);
+			    Iteracao interacao = new Iteracao(conversa);
 				
 				// Envio de "Escrevendo" antes de enviar a resposta.
-				baseResponse = bot.execute(new SendChatAction(cliente.getIdentificador(), ChatAction.typing.name()));
+				baseResponse = bot.execute(new SendChatAction(conversa.getIdentificador(), ChatAction.typing.name()));
 
 				// Verificacao de acao de chat foi enviada com sucesso.
 				System.out.println("Resposta de Chat Action Enviada? " + baseResponse.isOk());
 
 				// Envio da mensagem de resposta.
-				sendResponse = bot.execute(new SendMessage(cliente.getIdentificador(), cliente.resposta()));
+				RespostaBot respostaBot = interacao.devolverResposta();
+					
+				System.out.println(":: DISPLAY APENAS PARA TESTES ::");
+				System.out.println("length       : " + respostaBot.getTexto().length);
+				System.out.println("possuiTeclado: " + respostaBot.isPossuiTeclado());
+	
+				if (!respostaBot.isPossuiTeclado()) {
+					// Para resposta sem teclado
+					for(int i = 0; i < respostaBot.getTexto().length; i++) {
+						sendResponse = bot.execute(new SendMessage(conversa.getIdentificador(), respostaBot.getTexto()[i]));
+						// Verificacao de mensagem enviada com sucesso.
+						System.out.println("Mensagem Enviada? " + sendResponse.isOk());
+					}
+				} else {					
+					// Para respostas com teclado (teclado aparece apenas na ultima frase enviada)
+					for(int i = 0; i < (respostaBot.getTexto().length - 1); i++) {
+						System.out.println("i = " + i + " / texto " + respostaBot.getTexto()[i]);
+						sendResponse = bot.execute(new SendMessage(conversa.getIdentificador(), respostaBot.getTexto()[i]));
+						// Verificacao de mensagem enviada com sucesso.
+						System.out.println("Mensagem Enviada? " + sendResponse.isOk());
 
-				// Verificacao de mensagem enviada com sucesso.
-				System.out.println("Mensagem Enviada? " + sendResponse.isOk());
+					}
+					sendResponse = bot.execute(new SendMessage(conversa.getIdentificador(), respostaBot.getTexto()[-1]).replyMarkup(respostaBot.getTeclado()));
+					// Verificacao de mensagem enviada com sucesso.
+					System.out.println("Mensagem Enviada? " + sendResponse.isOk());
+				}
 				
 			}
 		}
 	}
 
-	private static Cliente consultaCliente(Update update) {
+	private static Cliente consultarCliente(Update update) {
 		HashMap<Long, Cliente> clientes = new HashMap<Long, Cliente>();
 
-		Long idCliente = update.message().chat().id();
-		String nome = update.message().chat().firstName();
-		String sobrenome = update.message().chat().lastName();
-		Cliente cliente = new Cliente(idCliente, nome, sobrenome);
+		Long idCliente = update.message().from().id();
+		String nome = update.message().from().firstName();
+		String sobrenome = update.message().from().lastName();
+
+		Cliente cliente = null;
+		
 		if (!clientes.containsKey(idCliente)) {
-		    Iteracao conversa = new Iteracao(cliente);
-		    cliente.setConversa(conversa);
+			cliente = new Cliente(idCliente, nome, sobrenome);
 		    clientes.put(idCliente, cliente);
 		} else {
 			cliente = clientes.get(idCliente);
 		}
 		
-		cliente.setPergunta(update.message().text());
 		return cliente;
 	}
 }
