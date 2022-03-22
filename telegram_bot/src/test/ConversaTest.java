@@ -15,7 +15,7 @@ public class ConversaTest {
 	@Test
 	public void instanciaConversa() {
 		Cliente cliente = new Cliente((long) 1, "Alexandre", "Maia");
-		Conversa conversa = cliente.iniciarConversa((long) 1);
+		Conversa conversa = cliente.getConversa();
 		assertNotNull(conversa.getDataHoraInicio());
 		assertNull(conversa.getDataHoraFim());
 		assertEquals(cliente, conversa.getCliente());
@@ -25,7 +25,7 @@ public class ConversaTest {
 	@Test
 	public void encerraConversa() {
 		Cliente cliente = new Cliente((long) 1, "Alexandre", "Maia");
-		Conversa conversa = cliente.iniciarConversa((long) 1);
+		Conversa conversa = cliente.getConversa();
 		conversa.encerrarConversa();
 		assertNotNull(conversa.getDataHoraInicio());
 		assertNotNull(conversa.getDataHoraFim());

@@ -44,6 +44,17 @@ public class Iteracao {
 			if (estimulo.equalsIgnoreCase("SAIR")) {
 				conversa.encerrarConversa();
 			}
+			if (Bebida.ehBebidaValida(estimulo)){
+				conversa.mudarIteracaoAtual(EstadoIteracao.PEDIDO_QUANTIDADE);
+			}
+			break;
+		case "PEDIDO_QUANTIDADE":
+			if (estimulo.matches("[0-9]+")){
+				conversa.mudarIteracaoAtual(EstadoIteracao.PEDIDO_ADICIONADO);
+			}
+			break;
+		case "PEDIDO_ADICIONADO":
+			
 		default:
 			break;
 		}
@@ -74,7 +85,7 @@ public class Iteracao {
 			// botoesMenuInicial[1] = "AJUDA";
 			// Keyboard keyMenuInicial = new
 			// ReplyKeyboardMarkup(botoesMenuInicial).resizeKeyboard(true).oneTimeKeyboard(true);
-
+            
 			Keyboard keyInicio = new ReplyKeyboardMarkup(
 					new KeyboardButton[] { new KeyboardButton("PEDIDO")},
 					new KeyboardButton[] { new KeyboardButton("AJUDA")}, 
@@ -100,7 +111,17 @@ public class Iteracao {
 			resposta = new RespostaBot(texto, keyPedidoProduto);
 			break;
 		case "PEDIDO_QUANTIDADE":
+			texto.add("Digite a quantidade da bebida selecionda.");
+			resposta = new RespostaBot(texto);
+			break;
 		case "PEDIDO_ADICIONADO":
+			//TODO Adicionar o Pedido aqui
+			texto.add("Pedido adicionado com sucesso");
+			resposta = new RespostaBot(texto);
+		case "PEDIDO_AJUDA":
+			texto.add("Digite ou selecione PEDIDO para fazer um pedido de uma bebida.");
+			resposta = new RespostaBot(texto);
+			break;
 		case "CONTA_PARCIAL":
 		case "CONTA_ENCERRA":
 		case "FIM":

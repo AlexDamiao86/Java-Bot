@@ -15,10 +15,12 @@ import com.pengrad.telegrambot.response.SendResponse;
 
 public class Main {
 
+	private static HashMap<Long, Cliente> clientes = new HashMap<Long, Cliente>();;
+	
 	public static void main(String[] args) {
 
-		final String MEU_BOT = "5129788142:AAHAyyEguv51zDQUeph6k4s_ABAZBiRVUUc";
-
+		final String MEU_BOT = "5075462972:AAGPg6M1OxG-AmkN-x9WfYRFH3VL4RZCXj4";
+      
 		// Criacao do objeto bot com as informacoes de acesso.
 		TelegramBot bot = new TelegramBot(MEU_BOT);
 
@@ -34,7 +36,8 @@ public class Main {
 		// Controle de off-set, isto e, a partir deste ID sera lido as mensagens
 		// pendentes na fila.
 		int m = 0;
-
+        
+		
 		// Loop infinito pode ser alterado por algum timer de intervalo curto.
 		while (true) {
 			// Executa comando no Telegram para obter as mensagens pendentes a partir de um
@@ -60,8 +63,7 @@ public class Main {
 
 				Cliente cliente = consultarCliente(update);
 
-				Long idConversa = update.message().chat().id();
-				Conversa conversa = cliente.iniciarConversa(idConversa);
+				Conversa conversa = cliente.getConversa();
 				String estimulo = "";
 				if (update.message().text() != null) {
 					estimulo = update.message().text();
@@ -112,8 +114,6 @@ public class Main {
 	}
 
 	private static Cliente consultarCliente(Update update) {
-		HashMap<Long, Cliente> clientes = new HashMap<Long, Cliente>();
-
 		Long idCliente = update.message().from().id();
 		String nome = update.message().from().firstName();
 		String sobrenome = update.message().from().lastName();
