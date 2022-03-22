@@ -1,8 +1,6 @@
 package telegram_bot;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 
 /**
  * Lista com todos os drinks disponíveis no menu 
@@ -44,7 +42,7 @@ public enum Bebida {
 		final int TAM_LINHA = 40;
 		String linha = "";
 		
-		String menu = "             ***  MENU DE BEBIDAS  ***"
+		String menu = "           *** MENU DE BEBIDAS ***            "
 				+ "\n------------------------------------------------";
 		for (Bebida bebida : Bebida.values()) {
 			linha = "\n" + bebida.getIdentificador()+ ". " 
@@ -59,10 +57,10 @@ public enum Bebida {
 		return menu;
 	}
 	
-	public static boolean ehBebidaValida(String s) {
+	public static boolean ehBebidaValida(String nomeBebida) {
 		boolean achou = false;
 		for (Bebida bebida : Bebida.values()) {
-			if (bebida.getDescricao().equalsIgnoreCase(s)){
+			if (bebida.getDescricao().equalsIgnoreCase(nomeBebida)){
 				achou = true;
 				break;
 			}

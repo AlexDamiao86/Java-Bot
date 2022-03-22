@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import telegram_bot.Cliente;
 import telegram_bot.Conversa;
-import telegram_bot.EstadoIteracao;
+import telegram_bot.EstadoInteracao;
 
 public class ConversaTest {
 
@@ -19,7 +19,7 @@ public class ConversaTest {
 		assertNotNull(conversa.getDataHoraInicio());
 		assertNull(conversa.getDataHoraFim());
 		assertEquals(cliente, conversa.getCliente());
-		assertEquals(EstadoIteracao.INICIO, conversa.getIteracaoAtual());
+		assertEquals(EstadoInteracao.INICIO, conversa.getInteracaoAtual());
 	}
 	
 	@Test
@@ -30,6 +30,6 @@ public class ConversaTest {
 		assertNotNull(conversa.getDataHoraInicio());
 		assertNotNull(conversa.getDataHoraFim());
 		assertEquals(cliente, conversa.getCliente());
-		assertEquals(EstadoIteracao.FIM, conversa.getIteracaoAtual());
+		assertEquals(EstadoInteracao.FIM, conversa.getInteracaoAtual());
 	}
 }

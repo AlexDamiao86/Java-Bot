@@ -8,13 +8,13 @@ import com.pengrad.telegrambot.model.request.Keyboard;
 import com.pengrad.telegrambot.model.request.KeyboardButton;
 import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
 
-public class Iteracao {
+public class Interacao {
 
 	private Conversa conversa;
 	private String estimulo;
-    private Pedido pedido;
+    // private Pedido pedido;
     
-	public Iteracao(Conversa conversa, String estimulo) {
+	public Interacao(Conversa conversa, String estimulo) {
 		this.conversa = conversa;
 		this.estimulo = estimulo;
 	}
@@ -29,13 +29,13 @@ public class Iteracao {
 
 	private void verificarSeMudaEstado() {
 		
-		switch (conversa.getIteracaoAtual().name()) {
+		switch (conversa.getInteracaoAtual().name()) {
 		case "INICIO":
 			if (estimulo.equalsIgnoreCase("PEDIDO")) {
-				conversa.mudarIteracaoAtual(EstadoIteracao.PEDIDO_PRODUTO);
+				conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_PRODUTO);
 			}
 			if (estimulo.equalsIgnoreCase("AJUDA")) {
-				conversa.mudarIteracaoAtual(EstadoIteracao.PEDIDO_AJUDA);
+				conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_AJUDA);
 			}
 			if (estimulo.equalsIgnoreCase("SAIR")) {
 				conversa.encerrarConversa();
@@ -46,12 +46,12 @@ public class Iteracao {
 				conversa.encerrarConversa();
 			}
 			if (Bebida.ehBebidaValida(estimulo)){
-				conversa.mudarIteracaoAtual(EstadoIteracao.PEDIDO_QUANTIDADE);
+				conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_QUANTIDADE);
 			}
 			break;
 		case "PEDIDO_QUANTIDADE":
 			if (estimulo.matches("[0-9]+")){
-				conversa.mudarIteracaoAtual(EstadoIteracao.PEDIDO_ADICIONADO);
+				conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_ADICIONADO);
 			}
 			break;
 		case "PEDIDO_ADICIONADO":
@@ -59,10 +59,10 @@ public class Iteracao {
 			
 			break;
 		case "PEDIDO_AJUDA":
-			conversa.mudarIteracaoAtual(EstadoIteracao.PEDIDO_PRODUTO);
+			conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_PRODUTO);
 			break;
 		case "CONTA_PARCIAL":
-			conversa.mudarIteracaoAtual(EstadoIteracao.PEDIDO_PRODUTO);
+			conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_PRODUTO);
 			break;
 		case "CONTA_ENCERRA":	
 		default:
@@ -78,12 +78,12 @@ public class Iteracao {
 
 		if(ehSaudacao()) {
 			texto.add(this.mostraSaudacao() + ", " + conversa.getCliente().getNome() + "! Belezinha?");
-			this.conversa.mudarIteracaoAtual(EstadoIteracao.INICIO);
+			this.conversa.mudarInteracaoAtual(EstadoInteracao.INICIO);
 		};
 		
 		verificarSeMudaEstado();
 	    
-		switch (conversa.getIteracaoAtual().name()) {
+		switch (conversa.getInteracaoAtual().name()) {
 		case "INICIO":
 			texto.add("Oi, " + conversa.getCliente().getNome() + ", " + this.mostraSaudacao()
 					+ "! Seja bem-vindo ao BarBot!");
@@ -131,7 +131,7 @@ public class Iteracao {
 			texto.add("Pedido adicionado com sucesso");
 			texto.add("Adicione mais bebidas ou digite SAIR para encerrar");
 			resposta = new RespostaBot(texto);
-			conversa.mudarIteracaoAtual(EstadoIteracao.PEDIDO_PRODUTO);
+			conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_PRODUTO);
 			break;
 		case "PEDIDO_AJUDA":
 			texto.add("Digite ou selecione PEDIDO para fazer um pedido de uma bebida.");

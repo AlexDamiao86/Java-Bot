@@ -1,7 +1,6 @@
 package telegram_bot;
 
 import java.util.ArrayList;
-import java.util.Stack;
 
 public class Cliente {
 	private Long identificador;
