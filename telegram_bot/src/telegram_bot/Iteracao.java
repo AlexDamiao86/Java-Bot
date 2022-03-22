@@ -12,7 +12,8 @@ public class Iteracao {
 
 	private Conversa conversa;
 	private String estimulo;
-
+    private Pedido pedido;
+    
 	public Iteracao(Conversa conversa, String estimulo) {
 		this.conversa = conversa;
 		this.estimulo = estimulo;
@@ -55,6 +56,15 @@ public class Iteracao {
 			break;
 		case "PEDIDO_ADICIONADO":
 			
+			
+			break;
+		case "PEDIDO_AJUDA":
+			conversa.mudarIteracaoAtual(EstadoIteracao.PEDIDO_PRODUTO);
+			break;
+		case "CONTA_PARCIAL":
+			conversa.mudarIteracaoAtual(EstadoIteracao.PEDIDO_PRODUTO);
+			break;
+		case "CONTA_ENCERRA":	
 		default:
 			break;
 		}
@@ -68,10 +78,11 @@ public class Iteracao {
 
 		if(ehSaudacao()) {
 			texto.add(this.mostraSaudacao() + ", " + conversa.getCliente().getNome() + "! Belezinha?");
+			this.conversa.mudarIteracaoAtual(EstadoIteracao.INICIO);
 		};
 		
 		verificarSeMudaEstado();
-	
+	    
 		switch (conversa.getIteracaoAtual().name()) {
 		case "INICIO":
 			texto.add("Oi, " + conversa.getCliente().getNome() + ", " + this.mostraSaudacao()
@@ -109,15 +120,19 @@ public class Iteracao {
 								new KeyboardButton[] { new KeyboardButton("SAIR")});
 			
 			resposta = new RespostaBot(texto, keyPedidoProduto);
+
 			break;
 		case "PEDIDO_QUANTIDADE":
-			texto.add("Digite a quantidade da bebida selecionda.");
+			texto.add("Digite a quantidade da bebida selecionada:");
 			resposta = new RespostaBot(texto);
 			break;
 		case "PEDIDO_ADICIONADO":
 			//TODO Adicionar o Pedido aqui
 			texto.add("Pedido adicionado com sucesso");
+			texto.add("Adicione mais bebidas ou digite SAIR para encerrar");
 			resposta = new RespostaBot(texto);
+			conversa.mudarIteracaoAtual(EstadoIteracao.PEDIDO_PRODUTO);
+			break;
 		case "PEDIDO_AJUDA":
 			texto.add("Digite ou selecione PEDIDO para fazer um pedido de uma bebida.");
 			resposta = new RespostaBot(texto);
