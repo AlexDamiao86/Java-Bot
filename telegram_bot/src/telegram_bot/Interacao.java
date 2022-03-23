@@ -12,7 +12,7 @@ public class Interacao {
 
 	private Conversa conversa;
 	private String estimulo;
-    // private Pedido pedido;
+   // private Pedido pedido = null;
     
 	public Interacao(Conversa conversa, String estimulo) {
 		this.conversa = conversa;
@@ -28,7 +28,7 @@ public class Interacao {
 	}
 
 	private void verificarSeMudaEstado() {
-		
+				
 		switch (conversa.getInteracaoAtual().name()) {
 		case "INICIO":
 			if (estimulo.equalsIgnoreCase("PEDIDO")) {
@@ -46,20 +46,40 @@ public class Interacao {
 				conversa.encerrarConversa();
 			}
 			if (Bebida.ehBebidaValida(estimulo)){
+			    pedido = new Pedido(conversa.getCliente().getConta(), Bebida.getBebidaPorDescricao(estimulo));
 				conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_QUANTIDADE);
-			}
+			} 
 			break;
 		case "PEDIDO_QUANTIDADE":
 			if (estimulo.matches("[0-9]+")){
+				System.out.println(estimulo);
+				System.out.println(pedido.toString());
+				pedido.setQuantidade(Integer.parseInt(estimulo));
+				conversa.getCliente().getConta().incluirPedidoConta(pedido);
 				conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_ADICIONADO);
 			}
 			break;
 		case "PEDIDO_ADICIONADO":
-			
-			
+			if (estimulo.equalsIgnoreCase("ADICIONAR BEBIDA")) {
+				conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_PRODUTO);
+			}
+			if (estimulo.equalsIgnoreCase("MOSTRAR PARCIAL")) {
+				conversa.mudarInteracaoAtual(EstadoInteracao.CONTA_PARCIAL);
+			}
+			if (estimulo.equalsIgnoreCase("FECHAR CONTA")) {
+				conversa.mudarInteracaoAtual(EstadoInteracao.CONTA_ENCERRA);
+			}
 			break;
 		case "PEDIDO_AJUDA":
-			conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_PRODUTO);
+			if (estimulo.equalsIgnoreCase("PEDIDO")) {
+				conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_PRODUTO);
+			}
+			if (estimulo.equalsIgnoreCase("MOSTRAR PARCIAL")) {
+				conversa.mudarInteracaoAtual(EstadoInteracao.CONTA_PARCIAL);
+			}
+			if (estimulo.equalsIgnoreCase("FECHAR CONTA")) {
+				conversa.mudarInteracaoAtual(EstadoInteracao.CONTA_ENCERRA);
+			}
 			break;
 		case "CONTA_PARCIAL":
 			conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_PRODUTO);
@@ -77,12 +97,18 @@ public class Interacao {
 		ArrayList<String> texto = new ArrayList<String>();
 
 		if(ehSaudacao()) {
-			texto.add(this.mostraSaudacao() + ", " + conversa.getCliente().getNome() + "! Belezinha?");
-			this.conversa.mudarInteracaoAtual(EstadoInteracao.INICIO);
-		};
-		
+			if(!conversa.getCliente().isContaAberta()) {
+				texto.add("Joinha?");
+				this.conversa.mudarInteracaoAtual(EstadoInteracao.INICIO);
+			} else {
+				// Aqui foi feita uma saudação e possui conta está aberta
+				texto.add("Belezinha? O que deseja?"); 
+				this.conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_PRODUTO);
+			}
+		}
+			
 		verificarSeMudaEstado();
-	    
+	  
 		switch (conversa.getInteracaoAtual().name()) {
 		case "INICIO":
 			texto.add("Oi, " + conversa.getCliente().getNome() + ", " + this.mostraSaudacao()
@@ -127,20 +153,35 @@ public class Interacao {
 			resposta = new RespostaBot(texto);
 			break;
 		case "PEDIDO_ADICIONADO":
-			//TODO Adicionar o Pedido aqui
-			texto.add("Pedido adicionado com sucesso");
-			texto.add("Adicione mais bebidas ou digite SAIR para encerrar");
-			resposta = new RespostaBot(texto);
-			conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_PRODUTO);
+			texto.add("Pedido adicionado com sucesso!");
+			texto.add("Quer continuar seu pedido?");
+			Keyboard keyMaisPedidos = new ReplyKeyboardMarkup(
+					new KeyboardButton[] { new KeyboardButton("ADICIONAR BEBIDA")},
+					new KeyboardButton[] { new KeyboardButton("MOSTRAR PARCIAL")}, 
+					new KeyboardButton[] { new KeyboardButton("FECHAR CONTA")})
+					.resizeKeyboard(true).oneTimeKeyboard(true);
+			
+			resposta = new RespostaBot(texto, keyMaisPedidos);
 			break;
 		case "PEDIDO_AJUDA":
-			texto.add("Digite ou selecione PEDIDO para fazer um pedido de uma bebida.");
-			resposta = new RespostaBot(texto);
+			texto.add("Selecione uma das seguintes opções:");
+			
+			Keyboard keyAjuda = new ReplyKeyboardMarkup(
+					new KeyboardButton[] { new KeyboardButton("PEDIDO")},
+					new KeyboardButton[] { new KeyboardButton("MOSTRAR PARCIAL")}, 
+					new KeyboardButton[] { new KeyboardButton("FECHAR CONTA")})
+					.resizeKeyboard(true).oneTimeKeyboard(true);
+
+			resposta = new RespostaBot(texto, keyAjuda);
+			
 			break;
 		case "CONTA_PARCIAL":
+			texto.add(conversa.getCliente().getConta().mostrarParcialConta());
+			break;
 		case "CONTA_ENCERRA":
 		case "FIM":
-			texto.add("Tchau, até logo! Te espero por aqui para uma próxima visita!!");
+			texto.add("Tchau, até logo " + conversa.getCliente().getNome() + ", " + this.mostraSaudacao() + "!");
+			texto.add("Te espero por aqui em uma próxima visita!!");
 			resposta = new RespostaBot(texto);
 			break;
 		default: 

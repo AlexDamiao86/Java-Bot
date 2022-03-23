@@ -1,6 +1,7 @@
 package telegram_bot;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -59,6 +60,22 @@ public class Conta {
 		return somaValorPedidos;
 	}
 	
+	private long[] tempoPermanenciaCliente() {
+		
+	    final int MINUTES_PER_HOUR = 60;
+	    final int SECONDS_PER_MINUTE = 60;
+	    final int SECONDS_PER_HOUR = SECONDS_PER_MINUTE * MINUTES_PER_HOUR;
+	    
+		Duration duration = Duration.between(dataHoraAbertura, LocalDateTime.now());
+        long seconds = duration.getSeconds();
+
+        long hours = seconds / SECONDS_PER_HOUR;
+        long minutes = ((seconds % SECONDS_PER_HOUR) / SECONDS_PER_MINUTE);
+        long secs = (seconds % SECONDS_PER_MINUTE);
+
+        return new long[]{hours, minutes, secs};
+	}
+	
 	public String mostrarParcialConta() {
 		
 		final int TAM_LINHA = 40;
@@ -89,6 +106,11 @@ public class Conta {
 		cupom += linha;
 		cupom += "\n-------------------------------------------------```";
 
+		cupom += "\n-------------------------------------------------";
+		linha += "\nTEMPO DE PERMANENCIA: ";
+		long[] tempoPermanencia = tempoPermanenciaCliente();
+		linha += tempoPermanencia[0] + ":" + tempoPermanencia[1] + ":" + tempoPermanencia[2];
+		cupom += linha;
 		return cupom;
 	}
 	

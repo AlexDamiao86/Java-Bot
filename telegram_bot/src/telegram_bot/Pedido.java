@@ -5,15 +5,13 @@ import java.time.LocalDateTime;
 
 public class Pedido {
 	
-	private int identificador; 
 	private Conta conta; 
 	private Bebida bebida; 
 	private int quantidade; 
 	private LocalDateTime dataHoraPedido;
 	private BigDecimal valorPedido;
 	
-	public Pedido(int identificador, Conta conta, Bebida bebida, int quantidade) {
-		this.identificador = identificador;
+	public Pedido(Conta conta, Bebida bebida, int quantidade) {
 		this.conta = conta;
 		this.bebida = bebida;
 		this.setQuantidade(quantidade);
@@ -22,18 +20,13 @@ public class Pedido {
 		this.valorPedido = bebida.getPreco().multiply(bdQuantidade);
 	}
 	
-	public Pedido(int identificador, Conta conta, Bebida bebida) {
-		this.identificador = identificador;
+	public Pedido(Conta conta, Bebida bebida) {
 		this.conta = conta;
 		this.bebida = bebida;
 		this.setQuantidade(0);
 		this.dataHoraPedido = LocalDateTime.now();		 
 	}
 	
-	public int getIdentificador() {
-		return identificador;
-	}
-
 	public Conta getConta() {
 		return conta;
 	}
@@ -60,6 +53,4 @@ public class Pedido {
 		this.quantidade = quantidade; 
 	}
 	
-	
-
 }

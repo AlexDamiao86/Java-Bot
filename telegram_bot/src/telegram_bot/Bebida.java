@@ -1,6 +1,8 @@
 package telegram_bot;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Lista com todos os drinks disponíveis no menu 
@@ -16,6 +18,14 @@ public enum Bebida {
 	CAIPIRINHA(4, "Caipirinha de Limao",         new BigDecimal(14.00)),
 	TEQUILA(   5, "Shot de Tequila Jose Cuervo", new BigDecimal(22.00)),
 	HEINEKEN(  6, "Cerveja Heineken",            new BigDecimal(12.00));
+	
+	private static final Map<String, Bebida> bebidaPorDescricao = new HashMap<>();
+	
+	static {
+		for(Bebida bebida: Bebida.values()) {
+			bebidaPorDescricao.put(bebida.getDescricao(), bebida);
+		}
+	}
 	
 	private int identificador;
 	private String descricao;
@@ -59,15 +69,12 @@ public enum Bebida {
 		return menu;
 	}
 	
+	public static Bebida getBebidaPorDescricao(String nomeBebida) {
+		return bebidaPorDescricao.get(nomeBebida);
+	}
+	
 	public static boolean ehBebidaValida(String nomeBebida) {
-		boolean achou = false;
-		for (Bebida bebida : Bebida.values()) {
-			if (bebida.getDescricao().equalsIgnoreCase(nomeBebida)){
-				achou = true;
-				break;
-			}
-		}
-		return achou;
+		return (bebidaPorDescricao.get(nomeBebida) != null);
 	}
 	
 }
