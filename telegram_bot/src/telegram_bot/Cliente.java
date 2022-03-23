@@ -14,7 +14,6 @@ public class Cliente {
 		this.nome = nome;
 		this.sobrenome = sobrenome;
 		this.conversa = new Conversa(identificador, this);
-		// this.abrirConta();
 	}
 
 	public Long getIdentificador() {

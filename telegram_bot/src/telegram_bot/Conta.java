@@ -50,6 +50,9 @@ public class Conta {
 		return this.pedidos.add(pedido);
 	}
 	
+	public Pedido getUltimoPedido() {
+		return this.pedidos.get(this.pedidos.size()-1);
+	}
 	private BigDecimal valorTotalConta() {
 		BigDecimal somaValorPedidos = new BigDecimal(0.00);
 
