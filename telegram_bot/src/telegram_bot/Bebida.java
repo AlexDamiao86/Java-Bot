@@ -1,8 +1,6 @@
 package telegram_bot;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 
 /**
  * Lista com todos os drinks disponíveis no menu 
@@ -16,7 +14,8 @@ public enum Bebida {
 	CUBALIBRE( 2, "Cuba Libre",                  new BigDecimal(20.00)),
 	CERVEJABUD(3, "Cerveja Budweiser 330ml",     new BigDecimal(12.00)),
 	CAIPIRINHA(4, "Caipirinha de Limao",         new BigDecimal(14.00)),
-	TEQUILA(   5, "Shot de Tequila Jose Cuervo", new BigDecimal(22.00));
+	TEQUILA(   5, "Shot de Tequila Jose Cuervo", new BigDecimal(22.00)),
+	HEINEKEN(  6, "Cerveja Heineken",            new BigDecimal(12.00));
 	
 	private int identificador;
 	private String descricao;
@@ -42,9 +41,9 @@ public enum Bebida {
 
 	public static String mostrarMenuBebidas() {
 		final int TAM_LINHA = 40;
-		String linha = "";
+		String linha = "```";
 		
-		String menu = "             ***  MENU DE BEBIDAS  ***"
+		String menu = "```             ***  MENU DE BEBIDAS  ***"
 				+ "\n------------------------------------------------";
 		for (Bebida bebida : Bebida.values()) {
 			linha = "\n" + bebida.getIdentificador()+ ". " 
@@ -56,6 +55,7 @@ public enum Bebida {
 			menu  += linha;
 			linha = "";
 		}
+		menu  += "```";
 		return menu;
 	}
 

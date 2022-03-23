@@ -64,7 +64,7 @@ public class Conta {
 		final int TAM_LINHA = 40;
 		String linha = "";
 		
-		String cupom = "         ***  DEMONSTRATIVO CONTA  ***"
+		String cupom = "```         ***  DEMONSTRATIVO CONTA  ***"
 				+ "\n-------------------------------------------------";
 				
 		for (Pedido pedido: pedidos) {
@@ -80,14 +80,14 @@ public class Conta {
 						
 			linha = "";      
 		}
-		cupom += "\n-------------------------------------------------";
+		cupom += "\n_________________________________________________";
 		linha = "\nVALOR TOTAL DA CONTA";
 		while (linha.length() < TAM_LINHA) {
 			linha += ".";
 		}
 		linha += " R$ " + valorTotalConta().setScale(2);
 		cupom += linha;
-		cupom += "\n-------------------------------------------------";
+		cupom += "\n-------------------------------------------------```";
 
 		return cupom;
 	}
