@@ -8,12 +8,13 @@ import com.pengrad.telegrambot.model.request.Keyboard;
 import com.pengrad.telegrambot.model.request.KeyboardButton;
 import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
 
-public class Iteracao {
+public class Interacao {
 
 	private Conversa conversa;
 	private String estimulo;
-
-	public Iteracao(Conversa conversa, String estimulo) {
+    // private Pedido pedido;
+    
+	public Interacao(Conversa conversa, String estimulo) {
 		this.conversa = conversa;
 		this.estimulo = estimulo;
 	}
@@ -28,13 +29,13 @@ public class Iteracao {
 
 	private void verificarSeMudaEstado() {
 		
-		switch (conversa.getIteracaoAtual().name()) {
+		switch (conversa.getInteracaoAtual().name()) {
 		case "INICIO":
 			if (estimulo.equalsIgnoreCase("PEDIDO")) {
-				conversa.mudarIteracaoAtual(EstadoIteracao.PEDIDO_PRODUTO);
+				conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_PRODUTO);
 			}
 			if (estimulo.equalsIgnoreCase("AJUDA")) {
-				conversa.mudarIteracaoAtual(EstadoIteracao.PEDIDO_AJUDA);
+				conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_AJUDA);
 			}
 			if (estimulo.equalsIgnoreCase("SAIR")) {
 				conversa.encerrarConversa();
@@ -44,6 +45,26 @@ public class Iteracao {
 			if (estimulo.equalsIgnoreCase("SAIR")) {
 				conversa.encerrarConversa();
 			}
+			if (Bebida.ehBebidaValida(estimulo)){
+				conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_QUANTIDADE);
+			}
+			break;
+		case "PEDIDO_QUANTIDADE":
+			if (estimulo.matches("[0-9]+")){
+				conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_ADICIONADO);
+			}
+			break;
+		case "PEDIDO_ADICIONADO":
+			
+			
+			break;
+		case "PEDIDO_AJUDA":
+			conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_PRODUTO);
+			break;
+		case "CONTA_PARCIAL":
+			conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_PRODUTO);
+			break;
+		case "CONTA_ENCERRA":	
 		default:
 			break;
 		}
@@ -57,11 +78,12 @@ public class Iteracao {
 
 		if(ehSaudacao()) {
 			texto.add(this.mostraSaudacao() + ", " + conversa.getCliente().getNome() + "! Belezinha?");
+			this.conversa.mudarInteracaoAtual(EstadoInteracao.INICIO);
 		};
 		
 		verificarSeMudaEstado();
-	
-		switch (conversa.getIteracaoAtual().name()) {
+	    
+		switch (conversa.getInteracaoAtual().name()) {
 		case "INICIO":
 			texto.add("Oi, " + conversa.getCliente().getNome() + ", " + this.mostraSaudacao()
 					+ "! Seja bem-vindo ao BarBot!");
@@ -74,7 +96,7 @@ public class Iteracao {
 			// botoesMenuInicial[1] = "AJUDA";
 			// Keyboard keyMenuInicial = new
 			// ReplyKeyboardMarkup(botoesMenuInicial).resizeKeyboard(true).oneTimeKeyboard(true);
-
+            
 			Keyboard keyInicio = new ReplyKeyboardMarkup(
 					new KeyboardButton[] { new KeyboardButton("PEDIDO")},
 					new KeyboardButton[] { new KeyboardButton("AJUDA")}, 
@@ -98,9 +120,23 @@ public class Iteracao {
 								new KeyboardButton[] { new KeyboardButton("SAIR")});
 			
 			resposta = new RespostaBot(texto, keyPedidoProduto);
+
 			break;
 		case "PEDIDO_QUANTIDADE":
+			texto.add("Digite a quantidade da bebida selecionada:");
+			resposta = new RespostaBot(texto);
+			break;
 		case "PEDIDO_ADICIONADO":
+			//TODO Adicionar o Pedido aqui
+			texto.add("Pedido adicionado com sucesso");
+			texto.add("Adicione mais bebidas ou digite SAIR para encerrar");
+			resposta = new RespostaBot(texto);
+			conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_PRODUTO);
+			break;
+		case "PEDIDO_AJUDA":
+			texto.add("Digite ou selecione PEDIDO para fazer um pedido de uma bebida.");
+			resposta = new RespostaBot(texto);
+			break;
 		case "CONTA_PARCIAL":
 		case "CONTA_ENCERRA":
 		case "FIM":

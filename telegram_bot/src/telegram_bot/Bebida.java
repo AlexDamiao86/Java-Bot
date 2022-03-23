@@ -58,5 +58,16 @@ public enum Bebida {
 		menu  += "```";
 		return menu;
 	}
-
+	
+	public static boolean ehBebidaValida(String nomeBebida) {
+		boolean achou = false;
+		for (Bebida bebida : Bebida.values()) {
+			if (bebida.getDescricao().equalsIgnoreCase(nomeBebida)){
+				achou = true;
+				break;
+			}
+		}
+		return achou;
+	}
+	
 }

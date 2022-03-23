@@ -16,10 +16,18 @@ public class Pedido {
 		this.identificador = identificador;
 		this.conta = conta;
 		this.bebida = bebida;
-		this.quantidade = quantidade;
+		this.setQuantidade(quantidade);
 		this.dataHoraPedido = LocalDateTime.now();		
 		BigDecimal bdQuantidade = BigDecimal.valueOf(quantidade); 
 		this.valorPedido = bebida.getPreco().multiply(bdQuantidade);
+	}
+	
+	public Pedido(int identificador, Conta conta, Bebida bebida) {
+		this.identificador = identificador;
+		this.conta = conta;
+		this.bebida = bebida;
+		this.setQuantidade(0);
+		this.dataHoraPedido = LocalDateTime.now();		 
 	}
 	
 	public int getIdentificador() {
@@ -43,7 +51,15 @@ public class Pedido {
 	}
 
 	public BigDecimal getValorPedido() {
+		BigDecimal bdQuantidade = BigDecimal.valueOf(quantidade); 
+		this.valorPedido = bebida.getPreco().multiply(bdQuantidade);
 		return valorPedido;
 	}
+
+	public void setQuantidade(int quantidade) {
+		this.quantidade = quantidade; 
+	}
+	
+	
 
 }

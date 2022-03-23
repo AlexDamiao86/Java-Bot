@@ -1,6 +1,6 @@
 package telegram_bot;
 
-public enum EstadoIteracao {
+public enum EstadoInteracao {
 	
 	INICIO(1, "INICIO"), 
 	PEDIDO_PRODUTO(2, "SELECIONANDO PRODUTO"), 
@@ -14,7 +14,7 @@ public enum EstadoIteracao {
 	private int identificador; 
 	private String descricao;
 	
-	EstadoIteracao(int identificador, String descricao) {
+	EstadoInteracao(int identificador, String descricao) {
 		this.identificador = identificador;
 		this.descricao = descricao;
 	}
