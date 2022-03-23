@@ -41,7 +41,7 @@ public enum Bebida {
 
 	public static String mostrarMenuBebidas() {
 		final int TAM_LINHA = 40;
-		String linha = "```";
+		String linha = "";
 		
 		String menu = "```             ***  MENU DE BEBIDAS  ***"
 				+ "\n------------------------------------------------";
