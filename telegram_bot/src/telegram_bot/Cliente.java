@@ -1,19 +1,19 @@
 package telegram_bot;
 
 import java.util.ArrayList;
-import java.util.Stack;
 
 public class Cliente {
 	private Long identificador;
 	private String nome;
 	private String sobrenome;
-	private Stack<Conversa> conversas = new Stack<Conversa>();
+	private Conversa conversa;
 	private ArrayList<Conta> contas = new ArrayList<Conta>();
 	
 	public Cliente(Long identificador, String nome, String sobrenome) {
 		this.identificador = identificador;
 		this.nome = nome;
 		this.sobrenome = sobrenome;
+		this.conversa = new Conversa(identificador, this);
 	}
 
 	public Long getIdentificador() {
@@ -28,9 +28,9 @@ public class Cliente {
 		return sobrenome;
 	}	
 	
-	public Conversa iniciarConversa(Long identificadorConversa) {
-		Conversa conversa = new Conversa(identificadorConversa, this); 
-		return this.conversas.push(conversa);
+	
+	public Conversa getConversa() {
+		return this.conversa;
 	}
 	
 	public Conta abrirConta() {

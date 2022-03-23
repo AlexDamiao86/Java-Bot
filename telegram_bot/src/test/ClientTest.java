@@ -21,9 +21,9 @@ public class ClientTest {
 	public void deveAbrirConta() {
 		assertEquals("CONTA ABERTA", cliente.abrirConta().getSituacao().getDescricao());
 	}
-	@Test
-	public void deveIniciarConversa() {
-	
-	assertEquals(cliente, cliente.iniciarConversa(new Long(123456789)).getCliente());
-	}
+//	@Test
+//	public void deveIniciarConversa() {
+//	
+//	assertEquals(cliente, cliente.iniciarConversa(new Long(123456789)).getCliente());
+//	}
 }
