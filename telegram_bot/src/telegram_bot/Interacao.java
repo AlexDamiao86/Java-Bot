@@ -52,12 +52,15 @@ public class Interacao {
 		case "INICIO":
 			if (estimulo.equalsIgnoreCase("FAZER PEDIDO")) {
 				conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_PRODUTO);
+				estimulo = "";
 			}
 			if (estimulo.equalsIgnoreCase("AJUDA")) {
 				conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_AJUDA);
+				estimulo = "";
 			}
 			if (estimulo.equalsIgnoreCase("SUGESTAO")) {
 				conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_SUGESTAO);
+				estimulo = "";
 			}
 			if (estimulo.equalsIgnoreCase("SAIR")) {
 				conversa.encerrarConversa();
@@ -66,9 +69,11 @@ public class Interacao {
 		case "PEDIDO_SUGESTAO":
 			if (estimulo.equalsIgnoreCase("FAZER PEDIDO")) {
 				conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_PRODUTO);
+				estimulo = "";
 			}
 			if (estimulo.equalsIgnoreCase("AJUDA")) {
 				conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_AJUDA);
+				estimulo = "";
 			}
 			if (estimulo.equalsIgnoreCase("SAIR")) {
 				conversa.encerrarConversa();
@@ -83,6 +88,7 @@ public class Interacao {
 				Pedido pedido = new Pedido(conversa.getCliente().getConta(), Bebida.getBebidaPorDescricao(estimulo));
 				conversa.getCliente().getConta().incluirPedidoConta(pedido);
 				conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_QUANTIDADE);
+				estimulo = "";
 			}
 			break;
 		case "PEDIDO_QUANTIDADE":
@@ -90,48 +96,57 @@ public class Interacao {
 				Pedido pedido = conversa.getCliente().getConta().getUltimoPedido();
 				pedido.setQuantidade(Integer.parseInt(estimulo));
 				conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_ADICIONADO);
+				estimulo = "";
 			}
 			if (estimulo.equalsIgnoreCase("ALTERAR BEBIDA")) {
 				conversa.getCliente().getConta().excluirUltimoPedidoConta();
 				conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_PRODUTO);
+				estimulo = "";
 			}
 			break;
 		case "PEDIDO_ADICIONADO":
 			if (estimulo.equalsIgnoreCase("ADICIONAR BEBIDA")) {
 				conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_PRODUTO);
+				estimulo = "";
 			}
 			if (estimulo.equalsIgnoreCase("MOSTRAR PARCIAL")) {
 				conversa.mudarInteracaoAtual(EstadoInteracao.CONTA_PARCIAL);
+				estimulo = "";
 			}
 			if (estimulo.equalsIgnoreCase("FECHAR CONTA")) {
 				conversa.mudarInteracaoAtual(EstadoInteracao.CONTA_ENCERRA);
+				estimulo = "";
 			}
 			break;
 		case "PEDIDO_AJUDA":
-			if (estimulo.equalsIgnoreCase("PEDIDO")) {
+			if (estimulo.equalsIgnoreCase("FAZER PEDIDO")) {
 				conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_PRODUTO);
+				estimulo = "";
 			}
 			if (estimulo.equalsIgnoreCase("SUGESTAO")) {
 				conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_SUGESTAO);
+				estimulo = "";
 			}
 			if (conversa.getCliente().isContaAberta()) {
 				if (estimulo.equalsIgnoreCase("MOSTRAR PARCIAL")) {
 					conversa.mudarInteracaoAtual(EstadoInteracao.CONTA_PARCIAL);
+					estimulo = "";
 				}
 				if (estimulo.equalsIgnoreCase("FECHAR CONTA")) {
 					conversa.mudarInteracaoAtual(EstadoInteracao.CONTA_ENCERRA);
+					estimulo = "";
 				}
 			}
 			break;
 		case "CONTA_PARCIAL":
 			conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_PRODUTO);
+			estimulo = "";
 			break;
 		case "CONTA_ENCERRA":
 			break;
 		default:
 			break;
 		}
-
 	}
 
 	public RespostaBot devolverResposta() {
@@ -178,11 +193,9 @@ public class Interacao {
 			resposta = new RespostaBot(texto, keySugestao);
 			break;
 		case "PEDIDO_PRODUTO":
-			// TODO tentar imprimir essa mensagem para o cliente quando informado outra bebida
-			// mas nao mostrar na primeira vez que esta executando esse estado
-			// if (!Bebida.ehBebidaValida(estimulo)) {
-			// 	texto.add("Humm.. nao entendi.. Poderia repetir o pedido?");
-			// }
+			if (!Bebida.ehBebidaValida(estimulo) && (estimulo != "")) {
+				texto.add("Humm.. nao entendi.. Poderia repetir o pedido?");
+			}
 			texto.add(conversa.getCliente().getNome() + ", qual bebida gostaria? ");
 
 			String[] botoesBebidas = new String[Bebida.values().length];
@@ -205,12 +218,9 @@ public class Interacao {
 
 			break;
 		case "PEDIDO_QUANTIDADE":
-			// TODO tentar imprimir essa mensagem para o cliente quando informado 
-			// numero invalido, mas nao mostrar na primeira vez que esta executando 
-			// esse estado
-			//if (!estimulo.matches("[0-9]+")) {
-			//	texto.add("Nao consegui anotar o pedido, me diga um numero maior que 0..");
-			//}
+			if (!estimulo.matches("[0-9]+") && (estimulo != "")) {
+				texto.add("Nao consegui anotar o pedido, me diga um numero maior que 0..");
+			}
 			texto.add("Digite a quantidade da bebida selecionada:");
 			Keyboard keyQuantidade = new ReplyKeyboardMarkup(
 					new String[] { "1", "2", "3", "4", "5" }, 
