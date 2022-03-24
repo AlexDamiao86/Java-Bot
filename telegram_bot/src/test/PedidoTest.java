@@ -23,10 +23,9 @@ public class PedidoTest {
 	
 	@Test
 	public void deveConsistirOsDadosNoPedido() {
-		Pedido pedido = new Pedido(1, conta, Bebida.CAIPIRINHA, 5);
+		Pedido pedido = new Pedido(conta, Bebida.CAIPIRINHA, 5);
 		
 		assertEquals(5, pedido.getQuantidade());
-		assertEquals(4, pedido.getBebida().getIdentificador());
 		assertEquals(123, pedido.getConta().getCliente().getIdentificador());
 		assertEquals("Rafael", pedido.getConta().getCliente().getNome());
 		assertEquals(456, pedido.getConta().getIdentificador());
