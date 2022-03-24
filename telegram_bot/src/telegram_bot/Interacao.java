@@ -80,9 +80,13 @@ public class Interacao {
 			}
 			break;
 		case "PEDIDO_PRODUTO":
-			//TODO nao deixar encerrar conta se tiver conta aberta 
+			// TODO nao deixar encerrar conta se tiver conta aberta
 			if (estimulo.equalsIgnoreCase("SAIR")) {
-				conversa.encerrarConversa();
+				if (conversa.getCliente().isContaAberta()) {
+					this.conversa.mudarInteracaoAtual(EstadoInteracao.CONTA_ENCERRA);
+				} else {
+					conversa.encerrarConversa();
+				}
 			}
 			if (Bebida.ehBebidaValida(estimulo)) {
 				Pedido pedido = new Pedido(conversa.getCliente().getConta(), Bebida.getBebidaPorDescricao(estimulo));
@@ -139,7 +143,19 @@ public class Interacao {
 			}
 			break;
 		case "CONTA_PARCIAL":
-			conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_PRODUTO);
+			if (estimulo.equalsIgnoreCase("Mostrar Parcial")) {
+				conversa.mudarInteracaoAtual(EstadoInteracao.CONTA_PARCIAL);
+			}else {
+				if (estimulo.equalsIgnoreCase("Fechar Conta")) {
+					if (conversa.getCliente().isContaAberta()) {
+						this.conversa.mudarInteracaoAtual(EstadoInteracao.CONTA_ENCERRA);
+					} else {
+						conversa.encerrarConversa();
+					}
+				}else { 
+					conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_PRODUTO);
+				}
+			}
 			estimulo = "";
 			break;
 		case "CONTA_ENCERRA":
@@ -174,20 +190,15 @@ public class Interacao {
 			texto.add("Deseja uma SUGESTAO? Ou já gostaria de FAZER PEDIDO?");
 			texto.add("Você pode ainda informar AJUDA para consultar a lista de opções.");
 
-			Keyboard keyInicio = new ReplyKeyboardMarkup(
-					new String[] { "Sugestao" }, 
-					new String[] { "Fazer Pedido" },
-					new String[] { "Ajuda" }, 
-					new String[] { "Sair" }).resizeKeyboard(true).oneTimeKeyboard(true);
+			Keyboard keyInicio = new ReplyKeyboardMarkup(new String[] { "Sugestao" }, new String[] { "Fazer Pedido" },
+					new String[] { "Ajuda" }, new String[] { "Sair" }).resizeKeyboard(true).oneTimeKeyboard(true);
 
 			resposta = new RespostaBot(texto, keyInicio);
 			break;
 		case "PEDIDO_SUGESTAO":
 			texto.add(sugerirBebidaPorClima());
 
-			Keyboard keySugestao = new ReplyKeyboardMarkup(
-					new String[] { "Fazer Pedido" }, 
-					new String[] { "Ajuda" },
+			Keyboard keySugestao = new ReplyKeyboardMarkup(new String[] { "Fazer Pedido" }, new String[] { "Ajuda" },
 					new String[] { "Sair" }).resizeKeyboard(true).oneTimeKeyboard(true);
 
 			resposta = new RespostaBot(texto, keySugestao);
@@ -208,12 +219,8 @@ public class Interacao {
 			String[] botoesBebidasSlice2 = Arrays.copyOfRange(botoesBebidas, 3, 6);
 			String[] botoesBebidasSlice3 = Arrays.copyOfRange(botoesBebidas, 6, 9);
 
-			Keyboard keyPedido = new ReplyKeyboardMarkup(
-					botoesBebidasSlice1, 
-					botoesBebidasSlice2, 
-					botoesBebidasSlice3)
-					.resizeKeyboard(true).oneTimeKeyboard(true)
-					.addRow(new String[] { "Sair" });
+			Keyboard keyPedido = new ReplyKeyboardMarkup(botoesBebidasSlice1, botoesBebidasSlice2, botoesBebidasSlice3)
+					.resizeKeyboard(true).oneTimeKeyboard(true).addRow(new String[] { "Sair" });
 			resposta = new RespostaBot(texto, keyPedido);
 
 			break;
@@ -222,19 +229,15 @@ public class Interacao {
 				texto.add("Nao consegui anotar o pedido, me diga um numero maior que 0..");
 			}
 			texto.add("Digite a quantidade da bebida selecionada:");
-			Keyboard keyQuantidade = new ReplyKeyboardMarkup(
-					new String[] { "1", "2", "3", "4", "5" }, 
-					new String[] { "Alterar Bebida" })
-					.resizeKeyboard(true).oneTimeKeyboard(true);
+			Keyboard keyQuantidade = new ReplyKeyboardMarkup(new String[] { "1", "2", "3", "4", "5" },
+					new String[] { "Alterar Bebida" }).resizeKeyboard(true).oneTimeKeyboard(true);
 			resposta = new RespostaBot(texto, keyQuantidade);
 			break;
 		case "PEDIDO_ADICIONADO":
 			texto.add("Pedido adicionado com sucesso!");
 			texto.add("Quer continuar seu pedido?");
-			Keyboard keyMaisPedidos = new ReplyKeyboardMarkup(
-					new String[] { "Adicionar Bebida" },
-					new String[] { "Mostrar Parcial" }, 
-					new String[] { "Fechar Conta" }).resizeKeyboard(true)
+			Keyboard keyMaisPedidos = new ReplyKeyboardMarkup(new String[] { "Adicionar Bebida" },
+					new String[] { "Mostrar Parcial" }, new String[] { "Fechar Conta" }).resizeKeyboard(true)
 							.oneTimeKeyboard(true);
 
 			resposta = new RespostaBot(texto, keyMaisPedidos);
@@ -243,16 +246,11 @@ public class Interacao {
 			texto.add(conversa.getCliente().getNome() + ", você possui as seguintes opções:");
 			Keyboard keyAjuda = null;
 			if (conversa.getCliente().isContaAberta()) {
-				keyAjuda = new ReplyKeyboardMarkup(
-						new String[] { "Sugestao" },
-						new String[] { "Fazer Pedido" }, 
-						new String[] { "Mostrar Parcial" },
-						new String[] { "Fechar Conta" })
-						.resizeKeyboard(true).oneTimeKeyboard(true);
+				keyAjuda = new ReplyKeyboardMarkup(new String[] { "Sugestao" }, new String[] { "Fazer Pedido" },
+						new String[] { "Mostrar Parcial" }, new String[] { "Fechar Conta" }).resizeKeyboard(true)
+								.oneTimeKeyboard(true);
 			} else {
-				keyAjuda = new ReplyKeyboardMarkup(
-						new String[] { "Sugestao" },
-						new String[] { "Fazer Pedido" })
+				keyAjuda = new ReplyKeyboardMarkup(new String[] { "Sugestao" }, new String[] { "Fazer Pedido" })
 						.resizeKeyboard(true).oneTimeKeyboard(true);
 			}
 			resposta = new RespostaBot(texto, keyAjuda);
