@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import telegram_bot.Cliente;
 
-public class ClientTest {
+public class ClienteTest {
 	
 	Cliente cliente = new Cliente(new Long(123456), "Valdisnei", "Joinha");
 
