@@ -11,14 +11,17 @@ import java.util.Map;
  * @author fabio
  * @version 1.0
  */
-public enum Bebida {
-	PINACOLADA(1, "Pina Colada",                 new BigDecimal(15.00)),
-	CUBALIBRE( 2, "Cuba Libre",                  new BigDecimal(20.00)),
-	CERVEJABUD(3, "Cerveja Budweiser 330ml",     new BigDecimal(12.00)),
-	CAIPIRINHA(4, "Caipirinha de Limao",         new BigDecimal(14.00)),
-	TEQUILA(   5, "Shot de Tequila Jose Cuervo", new BigDecimal(22.00)),
-	HEINEKEN(  6, "Cerveja Heineken",            new BigDecimal(12.00));
-	
+public enum Bebida {	
+	CERVEJAHEINEKEN(1, "Heineken",                    new BigDecimal(12.00)),
+	CERVEJABUD(		2, "Budweiser",                   new BigDecimal(10.00)),
+	CERVEJASKOL(	3, "Skol",			       	      new BigDecimal(09.00)),	
+	PINACOLADA(		4, "Pina Colada",                 new BigDecimal(15.00)),
+	VINHO( 	   	    5, "Vinho",                       new BigDecimal(20.00)),
+	CAIPIRINHA(		6, "Caipirinha",                  new BigDecimal(14.00)),
+	AGUA(			7, "Agua",                        new BigDecimal(05.00)),
+	COCACOLA(  		8, "Coca-cola",		              new BigDecimal(06.00)),
+	SUCO(			9, "Suco", 						  new BigDecimal(08.00));
+
 	private static final Map<String, Bebida> bebidaPorDescricao = new HashMap<>();
 	
 	static {

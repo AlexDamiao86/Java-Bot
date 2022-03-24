@@ -14,7 +14,7 @@ public class ContaTest {
 	Cliente cliente = new Cliente((long) 1, "Alexandre", "Maia");
 	Conta conta = cliente.abrirConta();
 	Pedido pedido1 = new Pedido( conta, Bebida.PINACOLADA, 2);
-	Pedido pedido2 = new Pedido( conta, Bebida.CUBALIBRE, 4);
+	Pedido pedido2 = new Pedido( conta, Bebida.VINHO, 4);
 
 	@Test
 	public void deveMostrarParcialEGarantirIdentificadores() {

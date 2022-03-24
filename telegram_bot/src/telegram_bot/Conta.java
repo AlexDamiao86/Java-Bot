@@ -50,6 +50,10 @@ public class Conta {
 		return this.pedidos.add(pedido);
 	}
 	
+	public boolean excluirUltimoPedidoConta() {
+		return this.pedidos.remove(this.getUltimoPedido());
+	}
+	
 	public Pedido getUltimoPedido() {
 		return this.pedidos.get(this.pedidos.size()-1);
 	}
@@ -81,11 +85,11 @@ public class Conta {
 	
 	public String mostrarParcialConta() {
 		
-		final int TAM_LINHA = 40;
+		final int TAM_LINHA = 30;
 		String linha = "";
 		
-		String cupom = "```         ***  DEMONSTRATIVO CONTA  ***"
-				+ "\n-------------------------------------------------";
+		String cupom = "         ***  DEMONSTRATIVO CONTA  ***    "
+			       	 + "\n----------------------------------------";
 				
 		for (Pedido pedido: pedidos) {
 			linha = "\n" + pedido.getQuantidade() + " "  
@@ -100,20 +104,29 @@ public class Conta {
 						
 			linha = "";      
 		}
-		cupom += "\n_________________________________________________";
-		linha = "\nVALOR TOTAL DA CONTA";
+		cupom += "\n----------------------------------------";
+		linha = "\nValor da conta:";
 		while (linha.length() < TAM_LINHA) {
 			linha += ".";
 		}
 		linha += " R$ " + valorTotalConta().setScale(2);
 		cupom += linha;
-		cupom += "\n-------------------------------------------------```";
-
-		cupom += "\n-------------------------------------------------";
-		linha += "\nTEMPO DE PERMANENCIA: ";
+		cupom += "\n----------------------------------------";
+		cupom += "\n";
+		cupom += "\n----------------------------------------";
+		linha = "";
+		linha += "\nTempo de permanência: ";
 		long[] tempoPermanencia = tempoPermanenciaCliente();
-		linha += tempoPermanencia[0] + ":" + tempoPermanencia[1] + ":" + tempoPermanencia[2];
+		for (int i = 0; i < tempoPermanencia.length; i++) {
+			long numero = tempoPermanencia[i];
+			String formatted = String.format("%02d", numero);
+			linha += formatted;
+			if (i != (tempoPermanencia.length - 1)) {
+				linha += ":";
+			}
+		}
 		cupom += linha;
+		cupom += "\n----------------------------------------";
 		return cupom;
 	}
 	

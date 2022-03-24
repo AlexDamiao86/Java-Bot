@@ -19,7 +19,7 @@ public class Main {
 
 	public static void main(String[] args) {
 
-		final String MEU_BOT = "5075462972:AAGPg6M1OxG-AmkN-x9WfYRFH3VL4RZCXj4";
+		final String MEU_BOT = "5129788142:AAHAyyEguv51zDQUeph6k4s_ABAZBiRVUUc";
 
 		// Criacao do objeto bot com as informacoes de acesso.
 		TelegramBot bot = new TelegramBot(MEU_BOT);
@@ -67,15 +67,13 @@ public class Main {
 					if (update.message().text() != null) {
 						estimulo = update.message().text();
 					}
+					
 					Interacao interacao = new Interacao(conversa, estimulo);
 
 					// Consulta qual mensagem deve se enviar como resposta dependendo da interacao
 					RespostaBot respostaBot = interacao.devolverResposta();
-
-					System.out.println(":: DISPLAY APENAS PARA TESTES ::");
-					System.out.println("estadoConversa: " + conversa.getInteracaoAtual().name());
-					System.out.println("lengthResposta: " + respostaBot.getTexto().size());
-					System.out.println("possuiTeclado : " + respostaBot.isPossuiTeclado());
+					
+					System.out.println("Estado Conversa: " + conversa.getInteracaoAtual().name());
 
 					if (!respostaBot.isPossuiTeclado()) {
 						// Frases da resposta sem teclado (resposta sem o teclado)
