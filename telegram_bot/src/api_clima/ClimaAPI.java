@@ -10,7 +10,7 @@ import org.springframework.web.client.RestTemplate;
  */
 
 public class ClimaAPI {
-	private static final String TOKEN = "";
+	private static final String TOKEN = "75be859539bd162d18bf2ff72277dfb3";
 	private static RestTemplate restTemplate = new RestTemplate();
 	
 	

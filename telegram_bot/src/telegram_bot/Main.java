@@ -67,15 +67,13 @@ public class Main {
 					if (update.message().text() != null) {
 						estimulo = update.message().text();
 					}
+					
 					Interacao interacao = new Interacao(conversa, estimulo);
 
 					// Consulta qual mensagem deve se enviar como resposta dependendo da interacao
 					RespostaBot respostaBot = interacao.devolverResposta();
-
-					System.out.println(":: DISPLAY APENAS PARA TESTES ::");
-					System.out.println("estadoConversa: " + conversa.getInteracaoAtual().name());
-					System.out.println("lengthResposta: " + respostaBot.getTexto().size());
-					System.out.println("possuiTeclado : " + respostaBot.isPossuiTeclado());
+					
+					System.out.println("Estado Conversa: " + conversa.getInteracaoAtual().name());
 
 					if (!respostaBot.isPossuiTeclado()) {
 						// Frases da resposta sem teclado (resposta sem o teclado)
