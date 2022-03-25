@@ -62,6 +62,10 @@ public class Interacao {
 				conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_SUGESTAO);
 				estimulo = "";
 			}
+			if (estimulo.equalsIgnoreCase("MENU")) {
+				conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_MENU);
+				estimulo = "";
+			}
 			if (estimulo.equalsIgnoreCase("SAIR")) {
 				conversa.encerrarConversa();
 			}
@@ -79,8 +83,20 @@ public class Interacao {
 				conversa.encerrarConversa();
 			}
 			break;
+		case "PEDIDO_MENU":
+			if (estimulo.equalsIgnoreCase("FAZER PEDIDO")) {
+				conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_PRODUTO);
+				estimulo = "";
+			}
+			if (estimulo.equalsIgnoreCase("AJUDA")) {
+				conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_AJUDA);
+				estimulo = "";
+			}
+			if (estimulo.equalsIgnoreCase("SAIR")) {
+				conversa.encerrarConversa();
+			}
+			break;
 		case "PEDIDO_PRODUTO":
-			// TODO nao deixar encerrar conta se tiver conta aberta
 			if (estimulo.equalsIgnoreCase("SAIR")) {
 				if (conversa.getCliente().isContaAberta()) {
 					this.conversa.mudarInteracaoAtual(EstadoInteracao.CONTA_ENCERRA);
@@ -129,6 +145,10 @@ public class Interacao {
 			}
 			if (estimulo.equalsIgnoreCase("SUGESTAO")) {
 				conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_SUGESTAO);
+				estimulo = "";
+			}
+			if (estimulo.equalsIgnoreCase("MENU")) {
+				conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_MENU);
 				estimulo = "";
 			}
 			if (conversa.getCliente().isContaAberta()) {
@@ -188,12 +208,21 @@ public class Interacao {
 			texto.add("Oi, " + conversa.getCliente().getNome() + ", " + this.mostraSaudacao()
 					+ "! Seja bem-vindo ao BarBot!");
 			texto.add("Deseja uma SUGESTAO? Ou já gostaria de FAZER PEDIDO?");
+			texto.add("Deseja ver o MENU ?");
 			texto.add("Você pode ainda informar AJUDA para consultar a lista de opções.");
 
-			Keyboard keyInicio = new ReplyKeyboardMarkup(new String[] { "Sugestao" }, new String[] { "Fazer Pedido" },
+			Keyboard keyInicio = new ReplyKeyboardMarkup(new String[] { "Sugestao" }, new String[] { "Fazer Pedido" },new String[] { "Menu" },
 					new String[] { "Ajuda" }, new String[] { "Sair" }).resizeKeyboard(true).oneTimeKeyboard(true);
 
 			resposta = new RespostaBot(texto, keyInicio);
+			break;
+		case "PEDIDO_MENU":
+			texto.add(Bebida.mostrarMenuBebidas());
+
+			Keyboard keyMenu = new ReplyKeyboardMarkup(new String[] { "Fazer Pedido" }, new String[] { "Ajuda" },
+            					new String[] { "Sair" }).resizeKeyboard(true).oneTimeKeyboard(true);
+
+			resposta = new RespostaBot(texto,keyMenu);
 			break;
 		case "PEDIDO_SUGESTAO":
 			texto.add(sugerirBebidaPorClima());
@@ -247,10 +276,10 @@ public class Interacao {
 			Keyboard keyAjuda = null;
 			if (conversa.getCliente().isContaAberta()) {
 				keyAjuda = new ReplyKeyboardMarkup(new String[] { "Sugestao" }, new String[] { "Fazer Pedido" },
-						new String[] { "Mostrar Parcial" }, new String[] { "Fechar Conta" }).resizeKeyboard(true)
+						new String[] { "Mostrar Parcial" },new String[] { "Menu" } ,new String[] { "Fechar Conta" }).resizeKeyboard(true)
 								.oneTimeKeyboard(true);
 			} else {
-				keyAjuda = new ReplyKeyboardMarkup(new String[] { "Sugestao" }, new String[] { "Fazer Pedido" })
+				keyAjuda = new ReplyKeyboardMarkup(new String[] { "Menu" },new String[] { "Sugestao" }, new String[] { "Fazer Pedido" })
 						.resizeKeyboard(true).oneTimeKeyboard(true);
 			}
 			resposta = new RespostaBot(texto, keyAjuda);
