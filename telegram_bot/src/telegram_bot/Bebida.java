@@ -56,7 +56,7 @@ public enum Bebida {
 		final int TAM_LINHA = 40;
 		String linha = "";
 		
-		String menu = "     *** MENU DE BEBIDAS ***        "
+		String menu = "```     *** MENU DE BEBIDAS ***        "
 				+ "\n------------------------------------------------";
 		for (Bebida bebida : Bebida.values()) {
 			linha = "\n" + bebida.getIdentificador()+ ". " 
@@ -68,7 +68,7 @@ public enum Bebida {
 			menu  += linha;
 			linha = "";
 		}
-		menu  += linha;
+		menu  += linha + "```";
 		return menu;
 	}
 	
