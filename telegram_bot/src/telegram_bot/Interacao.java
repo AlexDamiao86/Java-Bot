@@ -99,9 +99,14 @@ public class Interacao {
 		case "PEDIDO_PRODUTO":
 			if (estimulo.equalsIgnoreCase("SAIR")) {
 				if (conversa.getCliente().isContaAberta()) {
-					this.conversa.mudarInteracaoAtual(EstadoInteracao.CONTA_ENCERRA);
+					conversa.mudarInteracaoAtual(EstadoInteracao.CONTA_ENCERRA);
 				} else {
 					conversa.encerrarConversa();
+				}
+			}
+			if (conversa.getCliente().isContaAberta()) {
+				if (estimulo.equalsIgnoreCase("MOSTRAR PARCIAL")) {
+					conversa.mudarInteracaoAtual(EstadoInteracao.CONTA_PARCIAL);
 				}
 			}
 			if (Bebida.ehBebidaValida(estimulo)) {
@@ -120,6 +125,9 @@ public class Interacao {
 			}
 			if (estimulo.equalsIgnoreCase("ALTERAR BEBIDA")) {
 				conversa.getCliente().getConta().excluirUltimoPedidoConta();
+				if (conversa.getCliente().getConta().getPedidos().size() == 0) {
+					conversa.getCliente().getConta().encerrarConta();
+				}
 				conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_PRODUTO);
 				estimulo = "";
 			}
@@ -163,22 +171,20 @@ public class Interacao {
 			}
 			break;
 		case "CONTA_PARCIAL":
-			if (estimulo.equalsIgnoreCase("Mostrar Parcial")) {
-				conversa.mudarInteracaoAtual(EstadoInteracao.CONTA_PARCIAL);
-			}else {
-				if (estimulo.equalsIgnoreCase("Fechar Conta")) {
-					if (conversa.getCliente().isContaAberta()) {
-						this.conversa.mudarInteracaoAtual(EstadoInteracao.CONTA_ENCERRA);
-					} else {
-						conversa.encerrarConversa();
-					}
-				}else { 
-					conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_PRODUTO);
-				}
+			if (estimulo.equalsIgnoreCase("CONTINUAR PEDINDO")) {
+				conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_PRODUTO);
+				estimulo = "";
 			}
-			estimulo = "";
+			if (estimulo.equalsIgnoreCase("FECHAR CONTA")) {
+				conversa.mudarInteracaoAtual(EstadoInteracao.CONTA_ENCERRA);
+				estimulo = "";
+			}
 			break;
 		case "CONTA_ENCERRA":
+			conversa.mudarInteracaoAtual(EstadoInteracao.INICIO);
+			break;
+		case "FIM": 
+			conversa.mudarInteracaoAtual(EstadoInteracao.INICIO);
 			break;
 		default:
 			break;
@@ -207,27 +213,30 @@ public class Interacao {
 		case "INICIO":
 			texto.add("Oi, " + conversa.getCliente().getNome() + ", " + this.mostraSaudacao()
 					+ "! Seja bem-vindo ao BarBot!");
-			texto.add("Deseja uma SUGESTAO? Ou já gostaria de FAZER PEDIDO?");
-			texto.add("Deseja ver o MENU ?");
+			texto.add("Deseja uma SUGESTAO? Ou já gostaria de FAZER PEDIDO? Deseja ver o MENU?");
 			texto.add("Você pode ainda informar AJUDA para consultar a lista de opções.");
 
-			Keyboard keyInicio = new ReplyKeyboardMarkup(new String[] { "Sugestao" }, new String[] { "Fazer Pedido" },new String[] { "Menu" },
-					new String[] { "Ajuda" }, new String[] { "Sair" }).resizeKeyboard(true).oneTimeKeyboard(true);
+			Keyboard keyInicio = new ReplyKeyboardMarkup(
+					new String[] { "Sugestao", "Menu" }, 
+					new String[] { "Fazer Pedido", "Ajuda"},
+					new String[] { "Sair" }).resizeKeyboard(true).oneTimeKeyboard(true);
 
 			resposta = new RespostaBot(texto, keyInicio);
 			break;
 		case "PEDIDO_MENU":
 			texto.add(Bebida.mostrarMenuBebidas());
 
-			Keyboard keyMenu = new ReplyKeyboardMarkup(new String[] { "Fazer Pedido" }, new String[] { "Ajuda" },
-            					new String[] { "Sair" }).resizeKeyboard(true).oneTimeKeyboard(true);
+			Keyboard keyMenu = new ReplyKeyboardMarkup(
+					new String[] { "Fazer Pedido", "Ajuda" }, 
+            		new String[] { "Sair" }).resizeKeyboard(true).oneTimeKeyboard(true);
 
 			resposta = new RespostaBot(texto,keyMenu);
 			break;
 		case "PEDIDO_SUGESTAO":
 			texto.add(sugerirBebidaPorClima());
 
-			Keyboard keySugestao = new ReplyKeyboardMarkup(new String[] { "Fazer Pedido" }, new String[] { "Ajuda" },
+			Keyboard keySugestao = new ReplyKeyboardMarkup(
+					new String[] { "Fazer Pedido", "Ajuda" },
 					new String[] { "Sair" }).resizeKeyboard(true).oneTimeKeyboard(true);
 
 			resposta = new RespostaBot(texto, keySugestao);
@@ -243,13 +252,29 @@ public class Interacao {
 			for (Bebida bebida : Bebida.values()) {
 				botoesBebidas[bebida.getIdentificador() - 1] = bebida.getDescricao();
 			}
-
-			String[] botoesBebidasSlice1 = Arrays.copyOfRange(botoesBebidas, 0, 3);
-			String[] botoesBebidasSlice2 = Arrays.copyOfRange(botoesBebidas, 3, 6);
-			String[] botoesBebidasSlice3 = Arrays.copyOfRange(botoesBebidas, 6, 9);
-
-			Keyboard keyPedido = new ReplyKeyboardMarkup(botoesBebidasSlice1, botoesBebidasSlice2, botoesBebidasSlice3)
-					.resizeKeyboard(true).oneTimeKeyboard(true).addRow(new String[] { "Sair" });
+			
+			String[] botoesBebidasLinha1 = Arrays.copyOfRange(botoesBebidas, 0, 3);
+			String[] botoesBebidasLinha2 = Arrays.copyOfRange(botoesBebidas, 3, 6);
+			String[] botoesBebidasLinha3 = Arrays.copyOfRange(botoesBebidas, 6, 9);
+			
+			Keyboard keyPedido = null;
+			if (conversa.getCliente().isContaAberta()) {
+				 keyPedido = new ReplyKeyboardMarkup(
+						botoesBebidasLinha1, 
+						botoesBebidasLinha2, 
+						botoesBebidasLinha3)
+						.resizeKeyboard(true).oneTimeKeyboard(true)
+						.addRow(new String[] { "Mostrar Parcial" })
+						.addRow(new String[] { "Sair" });
+			} else {
+				 keyPedido = new ReplyKeyboardMarkup(
+							botoesBebidasLinha1, 
+							botoesBebidasLinha2, 
+							botoesBebidasLinha3)
+							.resizeKeyboard(true).oneTimeKeyboard(true)
+							.addRow(new String[] { "Sair" });
+				
+			}
 			resposta = new RespostaBot(texto, keyPedido);
 
 			break;
@@ -286,7 +311,10 @@ public class Interacao {
 			break;
 		case "CONTA_PARCIAL":
 			texto.add(conversa.getCliente().getConta().mostrarParcialConta());
-			resposta = new RespostaBot(texto);
+			Keyboard keyContaParcial = new ReplyKeyboardMarkup(
+					new String[] { "Continuar pedindo" }, 
+					new String[] { "Fechar conta" }).resizeKeyboard(true).oneTimeKeyboard(true);
+			resposta = new RespostaBot(texto, keyContaParcial);
 			break;
 		case "CONTA_ENCERRA":
 			texto.add(conversa.getCliente().getConta().encerrarConta());
