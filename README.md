@@ -35,9 +35,9 @@ git clone https://github.com/AlexDamiao86/Java-Bot.git
 cd Java-bot
 ~~~
 2. Abrir o projeto na sua IDE de preferência.
-3. Criar seu Bot através do BotFather do Telegram e configurar a constante MEU_BOT no arquivo src/telegram_bot/Main.java com o Token recebido. (https://core.telegram.org/bots)[^1]
+3. Criar seu Bot através do BotFather do Telegram e configurar a constante MEU_BOT no arquivo src/telegram_bot/Main.java com o Token recebido. (https://core.telegram.org/bots). [^1]
 [^1]: Pode ser utilizado o @BarWaiterBot que possui o token informado na classe Main.java. 
-4. Criar seu Token para utilizar a API de clima do [OpenWeatherMap](https://openweathermap.org) para consultar a temperatura do local (que permite sugerir bebida no início da conversa) e configurar a constante TOKEN no arquivo src/api_clima/ClimaAPI.java.[^2]
+4. Criar seu Token para utilizar a API de clima do [OpenWeatherMap](https://openweathermap.org) para consultar a temperatura do local (que permite sugerir bebida no início da conversa) e configurar a constante TOKEN no arquivo src/api_clima/ClimaAPI.java. [^2]
 [^2]: Mantemos um token informado na classe ClimaAPI.java para avaliação do projeto. 
 5. Executar o arquivo Main.java. 
 6. Abrir o Bot através do Telegram no celular (recomendamos utilizar o celular para ser possível visualizar os botões mostrados durante as interações).
