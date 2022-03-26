@@ -54,7 +54,7 @@ public class Interacao {
 				conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_PRODUTO);
 				estimulo = "";
 			}
-			if (estimulo.equalsIgnoreCase("AJUDA")) {
+			if (estimulo.equalsIgnoreCase("AJUDA") || estimulo.equalsIgnoreCase("/AJUDA")) {
 				conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_AJUDA);
 				estimulo = "";
 			}
@@ -62,7 +62,7 @@ public class Interacao {
 				conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_SUGESTAO);
 				estimulo = "";
 			}
-			if (estimulo.equalsIgnoreCase("MENU")) {
+			if (estimulo.equalsIgnoreCase("MENU BEBIDAS")) {
 				conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_MENU);
 				estimulo = "";
 			}
@@ -75,12 +75,16 @@ public class Interacao {
 				conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_PRODUTO);
 				estimulo = "";
 			}
-			if (estimulo.equalsIgnoreCase("AJUDA")) {
+			if (estimulo.equalsIgnoreCase("AJUDA") || estimulo.equalsIgnoreCase("/AJUDA")) {
 				conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_AJUDA);
 				estimulo = "";
 			}
 			if (estimulo.equalsIgnoreCase("SAIR")) {
-				conversa.encerrarConversa();
+				if (conversa.getCliente().isContaAberta()) {
+					conversa.mudarInteracaoAtual(EstadoInteracao.CONTA_ENCERRA);
+				} else {
+					conversa.encerrarConversa();
+				}
 			}
 			break;
 		case "PEDIDO_MENU":
@@ -88,12 +92,16 @@ public class Interacao {
 				conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_PRODUTO);
 				estimulo = "";
 			}
-			if (estimulo.equalsIgnoreCase("AJUDA")) {
+			if (estimulo.equalsIgnoreCase("AJUDA") || estimulo.equalsIgnoreCase("/AJUDA")) {
 				conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_AJUDA);
 				estimulo = "";
 			}
 			if (estimulo.equalsIgnoreCase("SAIR")) {
-				conversa.encerrarConversa();
+				if (conversa.getCliente().isContaAberta()) {
+					conversa.mudarInteracaoAtual(EstadoInteracao.CONTA_ENCERRA);
+				} else {
+					conversa.encerrarConversa();
+				}
 			}
 			break;
 		case "PEDIDO_PRODUTO":
@@ -108,6 +116,10 @@ public class Interacao {
 				if (estimulo.equalsIgnoreCase("MOSTRAR PARCIAL")) {
 					conversa.mudarInteracaoAtual(EstadoInteracao.CONTA_PARCIAL);
 				}
+			}
+			if (estimulo.equalsIgnoreCase("AJUDA") || estimulo.equalsIgnoreCase("/AJUDA")) {
+				conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_AJUDA);
+				estimulo = "";
 			}
 			if (Bebida.ehBebidaValida(estimulo)) {
 				Pedido pedido = new Pedido(conversa.getCliente().getConta(), Bebida.getBebidaPorDescricao(estimulo));
@@ -145,6 +157,10 @@ public class Interacao {
 				conversa.mudarInteracaoAtual(EstadoInteracao.CONTA_ENCERRA);
 				estimulo = "";
 			}
+			if (estimulo.equalsIgnoreCase("AJUDA") || estimulo.equalsIgnoreCase("/AJUDA")) {
+				conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_AJUDA);
+				estimulo = "";
+			}
 			break;
 		case "PEDIDO_AJUDA":
 			if (estimulo.equalsIgnoreCase("FAZER PEDIDO")) {
@@ -155,7 +171,7 @@ public class Interacao {
 				conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_SUGESTAO);
 				estimulo = "";
 			}
-			if (estimulo.equalsIgnoreCase("MENU")) {
+			if (estimulo.equalsIgnoreCase("MENU BEBIDAS")) {
 				conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_MENU);
 				estimulo = "";
 			}
@@ -177,6 +193,10 @@ public class Interacao {
 			}
 			if (estimulo.equalsIgnoreCase("FECHAR CONTA")) {
 				conversa.mudarInteracaoAtual(EstadoInteracao.CONTA_ENCERRA);
+				estimulo = "";
+			}
+			if (estimulo.equalsIgnoreCase("AJUDA") || estimulo.equalsIgnoreCase("/AJUDA")) {
+				conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_AJUDA);
 				estimulo = "";
 			}
 			break;
@@ -217,7 +237,7 @@ public class Interacao {
 			texto.add("Você pode ainda informar AJUDA para consultar a lista de opções.");
 
 			Keyboard keyInicio = new ReplyKeyboardMarkup(
-					new String[] { "Sugestao", "Menu" }, 
+					new String[] { "Sugestao", "Menu Bebidas" }, 
 					new String[] { "Fazer Pedido", "Ajuda"},
 					new String[] { "Sair" }).resizeKeyboard(true).oneTimeKeyboard(true);
 
@@ -290,8 +310,10 @@ public class Interacao {
 		case "PEDIDO_ADICIONADO":
 			texto.add("Pedido adicionado com sucesso!");
 			texto.add("Quer continuar seu pedido?");
-			Keyboard keyMaisPedidos = new ReplyKeyboardMarkup(new String[] { "Adicionar Bebida" },
-					new String[] { "Mostrar Parcial" }, new String[] { "Fechar Conta" }).resizeKeyboard(true)
+			Keyboard keyMaisPedidos = new ReplyKeyboardMarkup(
+					new String[] { "Adicionar Bebida" },
+					new String[] { "Mostrar Parcial" }, 
+					new String[] { "Fechar Conta" }).resizeKeyboard(true)
 							.oneTimeKeyboard(true);
 
 			resposta = new RespostaBot(texto, keyMaisPedidos);
@@ -300,11 +322,18 @@ public class Interacao {
 			texto.add(conversa.getCliente().getNome() + ", você possui as seguintes opções:");
 			Keyboard keyAjuda = null;
 			if (conversa.getCliente().isContaAberta()) {
-				keyAjuda = new ReplyKeyboardMarkup(new String[] { "Sugestao" }, new String[] { "Fazer Pedido" },
-						new String[] { "Mostrar Parcial" },new String[] { "Menu" } ,new String[] { "Fechar Conta" }).resizeKeyboard(true)
+				keyAjuda = new ReplyKeyboardMarkup(
+						new String[] { "Sugestao" }, 
+						new String[] { "Fazer Pedido" },
+						new String[] { "Mostrar Parcial" },
+						new String[] { "Menu Bebidas" },
+						new String[] { "Fechar Conta" }).resizeKeyboard(true)
 								.oneTimeKeyboard(true);
 			} else {
-				keyAjuda = new ReplyKeyboardMarkup(new String[] { "Menu" },new String[] { "Sugestao" }, new String[] { "Fazer Pedido" })
+				keyAjuda = new ReplyKeyboardMarkup(
+						new String[] { "Menu Bebidas" },
+						new String[] { "Sugestao" }, 
+						new String[] { "Fazer Pedido" })
 						.resizeKeyboard(true).oneTimeKeyboard(true);
 			}
 			resposta = new RespostaBot(texto, keyAjuda);

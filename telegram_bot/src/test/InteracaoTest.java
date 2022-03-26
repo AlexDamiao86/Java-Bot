@@ -37,13 +37,12 @@ public class InteracaoTest {
 		assertTrue(resposta.getTexto().toString().contains("MENU"));
 	}
 	
-	@Test
-	public void deveSugerirBebidaPorClima() {
-		conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_SUGESTAO);
-		RespostaBot resposta = interacao.devolverResposta();
-		assertTrue(resposta.getTexto().toString().contains("Hoje está uma temperatura")); 
-		
-	}
+//	@Test
+//	public void deveSugerirBebidaPorClima() {
+//		conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_SUGESTAO);
+//		RespostaBot resposta = interacao.devolverResposta();
+//		assertTrue(resposta.getTexto().toString().contains("Hoje está uma temperatura")); 
+//	}
 	
 	@Test
 	public void deveSolicitarPedidoProduto () {

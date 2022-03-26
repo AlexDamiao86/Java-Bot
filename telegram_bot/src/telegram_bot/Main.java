@@ -19,7 +19,7 @@ public class Main {
 
 	public static void main(String[] args) {
 
-		final String MEU_BOT = "";
+		final String MEU_BOT = "5168493743:AAGf6hrsaoyozG5d7cjRYbnEePNK8mIwjgo";
 
 		// Criacao do objeto bot com as informacoes de acesso.
 		TelegramBot bot = new TelegramBot(MEU_BOT);
