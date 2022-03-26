@@ -79,18 +79,18 @@ public class InteracaoTest {
 //		System.out.println("oOo" + resposta.getTexto() + "oOo");
 //		assertTrue(resposta.getTexto().toString().contains("DEMONSTRATIVO CONTA"));
 //	}
-	@Test
-	public void deveEncerrarConta () {
-		conversa.mudarInteracaoAtual(EstadoInteracao.CONTA_ENCERRA);
-		RespostaBot resposta = interacao.devolverResposta();
-		assertTrue(resposta.getTexto().toString().contains("Conta recebida"));
-	}
-	@Test
-	public void deveFinalizarAtendimento () {
-		conversa.mudarInteracaoAtual(EstadoInteracao.FIM);
-		RespostaBot resposta = interacao.devolverResposta();
-		assertTrue(resposta.getTexto().toString().contains("Tchau, até logo"));
-	}
+//	@Test
+//	public void deveEncerrarConta () {
+//		conversa.mudarInteracaoAtual(EstadoInteracao.CONTA_ENCERRA);
+//		RespostaBot resposta = interacao.devolverResposta();
+//		assertTrue(resposta.getTexto().toString().contains("Conta recebida"));
+//	}
+//	@Test
+//	public void deveFinalizarAtendimento () {
+//		conversa.mudarInteracaoAtual(EstadoInteracao.FIM);
+//		RespostaBot resposta = interacao.devolverResposta();
+//		assertTrue(resposta.getTexto().toString().contains("Tchau, até logo"));
+//	}
 	
 }
 
