@@ -222,8 +222,10 @@ public class Interacao {
 				this.conversa.mudarInteracaoAtual(EstadoInteracao.INICIO);
 			} else {
 				// Aqui foi feita uma saudação e possui conta está aberta
-				texto.add("Belezinha? O que deseja?");
-				this.conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_AJUDA);
+				if (conversa.getInteracaoAtual() != EstadoInteracao.PEDIDO_QUANTIDADE) {
+					texto.add("Belezinha? O que deseja?");
+					this.conversa.mudarInteracaoAtual(EstadoInteracao.PEDIDO_AJUDA);				
+				}
 			}
 		}
 
